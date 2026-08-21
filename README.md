@@ -1,148 +1,163 @@
 <div align="center">
 
-# ❤️ KardIA — Assistente de Saúde Preventiva 
-(Open Source)
+# ❤️ KardIA — Assistente de Saúde Preventiva SaaS
 
 **Plataforma Inteligente de Monitoramento Cardiovascular, Metabólico e Gestão Preventiva de Saúde com Inteligência Artificial.**
 
-[![Open Source](https://img.shields.io/badge/Open%20Source-GPL%20%2F%20MIT-brightgreen?style=for-the-badge&logo=open-source-initiative&logoColor=white)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
-[![Google Gemini & Groq](https://img.shields.io/badge/AI-Gemini%20%26%20Groq-8E75B2?style=for-the-badge&logo=google&logoColor=white)](https://deepmind.google/technologies/gemini/)
+[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-8E75B2?style=for-the-badge&logo=google&logoColor=white)](https://deepmind.google/technologies/gemini/)
 [![LGPD Compliant](https://img.shields.io/badge/LGPD-Conforme-2E7D32?style=for-the-badge)](https://www.gov.br/anpd)
 
 </div>
 
 ---
 
-## 📖 A História por Trás do KardIA: Do Susto ao Propósito
+## 📌 Visão Geral do Projeto
 
-> *"Como uma emergência em casa me fez criar o KardIA e o que aprendi aplicando SDD e IA na prática 🩺💻"*
+O **KardIA** é um SaaS de saúde preventiva de alto padrão visual e técnico, projetado para capacitar pacientes no acompanhamento de indicadores vitais e facilitar a comunicação com profissionais da saúde. O sistema combina **inteligência artificial generativa**, **visão computacional (OCR)** e **métricas de saúde baseadas em diretrizes médicas internacionais (OMS, ACC/AHA, SBD e ADA)**.
 
-Tudo começou quando a pressão arterial da minha esposa começou a oscilar de forma imprevisível. Em um momento estava tudo bem; poucas horas depois, víamos picos altíssimos que nos deixavam em alerta total.
-
-Quem já passou por isso conhece a angústia: anotações soltas em pedaços de papel, conversas perdidas no WhatsApp, o medo constante de esquecer um detalhe crucial na consulta e a dúvida se aquilo era um pico isolado ou o início de uma tendência perigosa.
-
-Diante desse cenário, percebi duas verdades fundamentais:
-1. **Cadernos e notas soltas não oferecem a clareza, a rapidez e a segurança que a saúde exige.**
-2. **Como desenvolvedor de software, eu tinha a capacidade técnica e a responsabilidade de construir uma solução real, precisa e sob medida.**
-
-Foi assim que nasceu o **KardIA**. 
-
-Decidi abrir o código deste projeto como **Open Source** para que outras famílias, pacientes e profissionais de saúde possam se beneficiar de uma tecnologia preventiva confiável, humana e acessível.
+A plataforma foi construída com foco absoluto em **experiência do usuário (UX/UI Premium)**, oferecendo uma landing page de alta conversão, painel intuitivo para o paciente e um **Painel Administrativo (Super Usuário)** completo para gestão de planos, status de contas e auditoria.
 
 ---
 
-## 🛠️ Engenharia de Software: SDD e Inteligência Artificial Responsável
+## 🎯 Pilares e Regras Arquiteturais
 
-Tratando-se de dados vitais e de saúde humana, o sistema não podia ser feito no improviso. Para garantir máxima confiabilidade e robustez desde o primeiro dia, adotei **Spec-Driven Development (SDD)**: cada detalhe da arquitetura, das regras clínicas e do tratamento de exceções foi especificado antes da codificação.
+O desenvolvimento e a governança do projeto seguem premissas rigorosas:
 
-### 🌟 Destaques da Implementação:
-
-* 🔹 **IA Alinhada às Diretrizes Médicas (OMS & SBC)**: Integração com fallback inteligente de alta velocidade entre **Google Gemini** e **Groq**. O sistema correlaciona pressão arterial, glicemia, hidratação, IMC e medicamentos, emitindo pareceres preventivos pautados nas diretrizes da **OMS**, da **Sociedade Brasileira de Cardiologia (SBC)** e da **Sociedade Brasileira de Diabetes (SBD)**.
-* 🔹 **Arquitetura Resiliente & Offline-First**: Rotinas de contingência local para que nenhuma medição seja perdida durante oscilações de conexão ou instabilidades de rede.
-* 🔹 **Privacidade e LGPD por Design**: Criptografia de ponta a ponta, regras granulares de acesso no Firebase (RBAC) e consentimento de termos em conformidade rigorosa com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).
-* 🔹 **UX/UI Humanizada & Anti-Stress**: Interface desenvolvida para acolher o paciente e reduzir a ansiedade em momentos de crise, com hierarquia visual clara, cores terapêuticas e cards intuitivos.
-* 🔹 **Impacto Clínico Real**: Nas consultas médicas, o paciente apresenta relatórios estruturados em PDF, com médias quinzenais, desvios-padrão e gráficos de tendência.
+1. **Idioma de Operação**: Todo o código, comentários, documentação e interface são estritamente mantidos em **Português do Brasil (pt-BR)**.
+2. **Design SaaS Premium & UX Humanizada**:
+   - Paleta de cores harmoniosa, desenhada especialmente para o nicho de saúde e bem-estar (tons de azul clínico, verde esmeralda para normalidade, âmbar/vermelho para alertas e fundo suave de alto contraste).
+   - Microanimações fluidas, tipografia moderna e design responsivo (Mobile-First / PWA-Ready).
+3. **Landing Page Persuasiva & Conversão**:
+   - Área de entrada com copywriting convincente, destacando benefícios imediatos, segurança de dados e credibilidade médica.
+   - Fluxo de autenticação (Login / Cadastro) integrado e elegante.
+4. **Painel de Super Usuário (Admin)**:
+   - Módulo administrativo exclusivo com controle de acesso baseado em papéis (RBAC - *Role-Based Access Control*).
+   - Gestão de usuários, aprovação de contas (Pendente, Ativo, Suspenso), atribuição de planos (Gratuito, Premium, Ouro) e monitoramento de métricas do sistema.
+5. **Privacidade e Conformidade LGPD**:
+   - Termos de Uso e Política de Privacidade interativos, com leitura obrigatória via scroll progressivo antes da aceitação.
+   - Registro de consentimento com timestamp e versão para auditoria legal (Art. 7º e 11 da LGPD).
+6. **Política Estrita de Versionamento**:
+   - Commits e pushes são realizados exclusivamente sob solicitação e após validação e testes dos fluxos.
 
 ---
 
-## 🚀 Funcionalidades do Ecossistema
+## 🚀 Funcionalidades Principais
 
-### 🩺 1. Monitoramento Cardiovascular Completo
-- Registro de Pressão Sistólica (SYS), Diastólica (DIA) e Pulso (BPM).
-- Classificação instantânea pelas diretrizes **OMS / SBC / ACC / AHA**:
+### 🩺 1. Monitoramento Cardiovascular (Pressão Arterial e Pulso)
+- Registro rápido de Pressão Sistólica (SYS), Diastólica (DIA) e Frequência Cardíaca (PUL).
+- Classificação automática em tempo real pelas diretrizes da **OMS / ACC / AHA**:
   - 🟢 **Normal**: < 120 / < 80 mmHg
   - 🟡 **Pressão Elevada**: 120–129 / < 80 mmHg
   - 🟠 **Hipertensão Estágio 1**: 130–139 ou 80–89 mmHg
   - 🔴 **Hipertensão Estágio 2**: ≥ 140 ou ≥ 90 mmHg
-  - 🚨 **Crise Hipertensiva**: ≥ 180 ou ≥ 120 mmHg (alertas imediatos de emergência)
+  - 🚨 **Crise Hipertensiva**: ≥ 180 ou ≥ 120 mmHg (com alertas de emergência imediata)
 
-### 📸 2. Leitura Automática por Foto (OCR com IA)
-- O paciente fotografa a tela do aparelho digital de pressão ou glicosímetro.
-- A visão computacional extrai os valores automaticamente, reduzindo erros de digitação.
+### 📸 2. Leitura Automática por Câmera / Foto (OCR com IA)
+- O paciente pode tirar uma foto do monitor digital de pressão.
+- A IA extrai automaticamente os valores de Sistólica, Diastólica e Pulso, eliminando erros de digitação manual.
 
 ### 🩸 3. Controle Glicêmico & Diabetes
-- Registro segmentado por momentos: *Jejum*, *Pós-prandial*, *Antes de Dormir* e *Aleatório*.
-- Alertas para **Hipoglicemia** (< 70 mg/dL), **Pré-Diabetes** e **Hiperglicemia** (padrão SBD/ADA).
+- Registro e classificação de glicemia capilar conforme a **Sociedade Brasileira de Diabetes (SBD)** e **ADA**:
+  - Contextos de aferição: *Jejum*, *Pós-prandial*, *Antes de Dormir* e *Aleatório*.
+  - Detecção precoce de **Hipoglicemia** (< 70 mg/dL), **Pré-Diabetes** e **Hiperglicemia**.
 
 ### 💧 4. Rastreamento Inteligente de Hidratação
-- Cálculo da meta diária com base no peso corporal (ex: 35ml/kg).
-- Registro rápido de ingestão com gráficos semanais de aderência à meta.
+- Cálculo dinâmico de meta hídrica diária baseada no peso corporal do paciente.
+- Adição rápida de copos (200ml, 350ml, 500ml) com visualização em barra de progresso diária e navegação pelo histórico semanal.
 
-### 💊 5. Gestão Farmacológica
-- Cadastro de medicamentos de uso **Contínuo** ou **Temporário**.
-- Controle de posologia, frequência e horários das doses.
+### 💊 5. Gestão de Medicamentos
+- Cadastro de medicações de uso **Contínuo** ou **Temporário**.
+- Definição de dosagem, horários, frequência e controle de status (ativo/inativo).
 
 ### ⚖️ 6. Cálculo Estratificado de IMC
-- Três curvas distintas de classificação:
-  1. **Crianças e Adolescentes (< 19 anos)**: Percentis de crescimento da OMS.
-  2. **Adultos (19 a 59 anos)**: Faixas clássicas da OMS.
-  3. **Idosos (≥ 60 anos)**: Critérios adaptados OMS/OPAS (eutrofia entre 22 e 27 kg/m²).
+- Algoritmo especializado com 3 curvas distintas de interpretação:
+  1. **Crianças e Adolescentes (< 19 anos)**: Curvas de percentil de crescimento da OMS.
+  2. **Adultos (19 a 59 anos)**: Faixas padrão da OMS (Baixo peso, Eutrofia, Sobrepeso, Obesidade I, II e III).
+  3. **Idosos (≥ 60 anos)**: Critérios adaptados da OMS/OPAS (eutrofia entre 22 e 27 kg/m²).
 
-### 📄 7. Exportação de Laudo Médico em PDF
-- Geração instantânea de relatório médico estruturado com `html2pdf.js` para apresentação em consultas e prontuários.
+### 🤖 7. Análises de Saúde & Feedback Preventivo com IA (Google Gemini)
+- Cruzamento de dados de pressão, glicemia, peso, medicações e histórico recente.
+- Emissão de pareceres informativos e educativos com linguagem clara e acolhedora, auxiliando na identificação de padrões e gatilhos de oscilação.
 
-### 🛡️ 8. Painel Administrativo (Super Usuário)
-- Painel para gestão de usuários, liberação de acessos, planos e logs de auditoria do sistema.
+### 📄 8. Exportação de Relatórios Médicos em PDF
+- Geração instantânea de laudos completos e formatados profissionalmente para apresentação em consultas médicas, utilizando `html2pdf.js`.
 
----
-
-## 🛠️ Stack Tecnológico
-
-* **Frontend**: TypeScript, Vite, HTML5 Semântico, Vanilla CSS Moderno (Design System dedicado).
-* **Visualização de Dados & Documentos**: Chart.js, Marked, DOMPurify, html2pdf.js.
-* **Backend Serverless**: Firebase Authentication, Cloud Firestore, Cloud Storage, Firebase Cloud Functions (Node.js).
-* **Motores de IA**: Google Gemini API (`@google/generative-ai`) e Groq SDK.
+### 🛡️ 9. Painel Administrativo (Super Usuário)
+- Visão geral com KPIs de usuários cadastrados, ativos e pendentes.
+- Tabela com filtros avançados por plano e status.
+- Modais administrativos para aprovar, suspender, alterar planos e editar perfis.
 
 ---
 
-## 📂 Estrutura do Projeto
+## 🛠️ Arquitetura e Tecnologias
 
 ```
-kardia-health/
-├── .gitignore                   # Proteção rigorosa de credenciais e builds
-├── .env.example                 # Modelo limpo de variáveis de ambiente
-├── LICENSE                      # Licença MIT com Medical Disclaimer
-├── SECURITY.md                  # Política de segurança e reporte de vulnerabilidades
-├── README.md                    # Documentação do ecossistema
-├── index.html                   # Aplicação SPA e Landing Page
-├── package.json                 # Configuração de scripts e dependências
-├── tsconfig.json                # Configuração do TypeScript
-├── functions/                   # Cloud Functions seguras (Node.js)
-│   ├── index.js                 # Integração de IA serverless
-│   └── package.json
-└── src/
-    ├── firebase.ts              # Conexão e inicialização dos serviços Firebase
-    ├── types.ts                 # Tipagens e classificações médicas (OMS/SBC/SBD)
-    ├── style.css                # Design System responsivo e temas
-    ├── main.ts                  # Controladores da aplicação e fluxo de telas
-    └── services/                # Regras de negócio e comunicação com APIs
-        ├── afericoes.ts         # Módulo de pressão arterial
-        ├── glicemia.ts          # Módulo de controle de glicose
-        ├── agua.ts              # Módulo de hidratação
-        ├── medications.ts       # Módulo farmacológico
-        ├── auth.ts              # Autenticação e RBAC
-        ├── ocr.ts               # Reconhecimento óptico de caracteres
-        └── analise-diaria.ts    # Pareceres preditivos de IA
+pressao/
+├── CLAUDE.md                    # Diretrizes e governança de IA
+├── firestore.rules              # Regras de segurança granulares do Firestore
+├── firestore.indexes.json       # Índices compostos para consultas otimizadas
+├── set_admin_claim.js           # Script seguro para atribuição de Custom Claims Admin
+└── pressao-app/                 # Aplicação Frontend + Cloud Functions
+    ├── index.html               # SPA com Landing Page, Modais e Telas do App
+    ├── package.json             # Dependências e scripts do projeto
+    ├── tsconfig.json            # Configuração do TypeScript
+    ├── functions/               # Firebase Cloud Functions (Node.js)
+    │   ├── index.js             # Endpoints seguros e integração com Gemini SDK
+    │   └── package.json
+    └── src/
+        ├── firebase.ts          # Inicialização e exportação dos serviços Firebase
+        ├── types.ts             # Interfaces TypeScript e funções de classificação médica
+        ├── style.css            # Design System (Tokens, Temas, Componentes, Responsividade)
+        ├── main.ts              # Controladores de tela, eventos e orquestração da SPA
+        └── services/            # Camada de serviços e regras de negócio
+            ├── afericoes.ts     # CRUD e cálculos de pressão arterial
+            ├── glicemia.ts      # CRUD e cálculos de glicose
+            ├── agua.ts          # Rastreamento de ingestão de água
+            ├── medications.ts   # Gestão de tratamentos farmacológicos
+            ├── auth.ts          # Autenticação, perfis e controle RBAC
+            ├── ocr.ts           # Reconhecimento óptico de imagens
+            └── analise-diaria.ts# Geração de resumos e relatórios com IA
 ```
 
+
 ---
+
+## 📚 Especificações Técnicas Detalhadas (Pasta `/docs`)
+
+Para especificações exaustivas de cada funcionalidade, esquemas NoSQL, diretrizes clínicas da OMS/SBC/SBD e arquitetura de IA sem resumos, consulte a pasta [`docs/`](file:///c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/pressao-app/docs/README.md):
+
+- 🏗️ [`01-arquitetura-e-visao-geral.md`](file:///c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/docs/01-arquitetura-e-visao-geral.md) — Arquitetura C4, Tech Stack e Resiliência.
+- 🔐 [`02-autenticacao-e-perfil-de-usuario.md`](file:///c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/docs/02-autenticacao-e-perfil-de-usuario.md) — Firebase Auth, Google Popup, LGPD Scroll Lock 95% e Anamnese.
+- 🩺 [`03-monitoramento-cardiovascular.md`](file:///c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/docs/03-monitoramento-cardiovascular.md) — Classificações OMS/SBC/ACC/AHA e Pressão de Pulso.
+- 📸 [`04-visao-computacional-ocr.md`](file:///c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/docs/04-visao-computacional-ocr.md) — OCR Multimodal com IA Gemini.
+- 🩸 [`05-controle-glicemico-e-diabetes.md`](file:///c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/docs/05-controle-glicemico-e-diabetes.md) — Gestão de Glicose e Diretrizes SBD/ADA.
+- 💧 [`06-gestao-de-hidratacao.md`](file:///c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/docs/06-gestao-de-hidratacao.md) — Meta Diária (35ml/kg) e Histórico Semanal.
+- 💊 [`07-gestao-farmacologica.md`](file:///c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/docs/07-gestao-farmacologica.md) — Fármacos Contínuos vs Temporários e IA.
+- ⚖️ [`08-antropometria-e-historico-de-peso.md`](file:///c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/docs/08-antropometria-e-historico-de-peso.md) — 3 Curvas de IMC e Histórico de Peso.
+- 🤖 [`09-motor-de-inteligencia-artificial.md`](file:///c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/docs/09-motor-de-inteligencia-artificial.md) — Cascata Gemini/Groq e Prompts Clínicos.
+- 📄 [`10-exportacao-e-laudos-medicos.md`](file:///c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/docs/10-exportacao-e-laudos-medicos.md) — Relatórios e Laudos em PDF com `html2pdf.js`.
+- 🛡️ [`11-painel-administrativo-super-user.md`](file:///c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/docs/11-painel-administrativo-super-user.md) — Custom Claims, Gestão e Auditoria Admin.
+- 🗄️ [`12-banco-de-dados-seguranca-e-regras.md`](file:///c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/docs/12-banco-de-dados-seguranca-e-regras.md) — Esquemas Firestore e Regras de Segurança.
+- 🎨 [`13-design-system-ui-ux.md`](file:///c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/docs/13-design-system-ui-ux.md) — Tokens de Design e Psicologia de Cores.
+
+---
+
 
 ## ⚙️ Instalação e Execução Local
 
 ### Pré-requisitos
-- **Node.js**: Versão 18 ou superior.
-- **NPM** ou gerenciador de pacotes equivalente.
-- Projeto configurado no [Firebase Console](https://console.firebase.google.com/).
+- **Node.js**: Versão 18.x ou superior instalada.
+- **NPM** ou **Yarn**.
+- Conta e projeto configurados no [Google Firebase Console](https://console.firebase.google.com/).
 
 ### Passo a Passo
 
-1. **Clonar o repositório:**
+1. **Clonar ou acessar o diretório do projeto:**
    ```bash
-   git clone https://github.com/Wagnerello/kardia-health.git
-   cd kardia-health
+   cd c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/pressao-app
    ```
 
 2. **Instalar as dependências:**
@@ -151,33 +166,79 @@ kardia-health/
    ```
 
 3. **Configurar as Variáveis de Ambiente:**
-   Copie o arquivo `.env.example` para `.env` e preencha com suas chaves:
-   ```bash
-   cp .env.example .env
+   Crie um arquivo `.env` na pasta `pressao-app/` baseado no `.env.example`:
+   ```env
+   # Firebase Config
+   VITE_FIREBASE_API_KEY=sua_api_key
+   VITE_FIREBASE_AUTH_DOMAIN=seu_projeto.firebaseapp.com
+   VITE_FIREBASE_PROJECT_ID=seu_projeto_id
+   VITE_FIREBASE_STORAGE_BUCKET=seu_projeto.appspot.com
+   VITE_FIREBASE_MESSAGING_SENDER_ID=seu_sender_id
+   VITE_FIREBASE_APP_ID=seu_app_id
+
+   # Google AI & Vision APIs
+   VITE_GEMINI_API_KEY=sua_chave_gemini
+   VITE_GOOGLE_VISION_API_KEY=sua_chave_vision
    ```
 
-4. **Rodar em modo de desenvolvimento:**
+4. **Executar o Servidor de Desenvolvimento:**
    ```bash
    npm run dev
    ```
+   Acesse a aplicação no navegador pelo endereço informado no terminal (normalmente `http://localhost:5173`).
 
-5. **Build de Produção:**
-   ```bash
-   npm run build
+---
+
+## 🔐 Configuração do Super Usuário (Admin)
+
+Para conceder privilégios de **Super Usuário** com acesso ao Painel Admin:
+
+1. Acesse o Firebase Console > **Configurações do Projeto** > **Contas de Serviço** e clique em **Gerar nova chave privada**.
+2. Salve o arquivo JSON como `serviceAccountKey.json` na raiz do repositório (`pressao/`).
+3. Abra o arquivo [set_admin_claim.js](file:///c:/Users/wagner.msilva/Desktop/PROJETOS/pressao/set_admin_claim.js) e insira o `UID` do usuário desejado na constante:
+   ```javascript
+   const uid = 'UID_DO_USUARIO_AQUI';
    ```
+4. Execute o script via Node.js na raiz:
+   ```bash
+   node set_admin_claim.js
+   ```
+5. O usuário precisará realizar logout e login novamente para carregar as novas permissões no token JWT.
+
+---
+
+## 📦 Deploy e Manutenção de Serviços
+
+### Deploy do Frontend (Firebase Hosting):
+```bash
+cd pressao-app
+npm run build
+firebase deploy --only hosting
+```
+
+### Deploy das Regras de Segurança e Índices do Firestore:
+```bash
+firebase deploy --only firestore:rules,firestore:indexes
+```
+
+### Deploy das Cloud Functions:
+```bash
+cd pressao-app/functions
+npm install
+firebase functions:config:set gemini.key="SUA_CHAVE_GEMINI"
+firebase deploy --only functions
+```
 
 ---
 
 ## 🔒 Segurança e Privacidade (LGPD)
 
-- O KardIA foi concebido seguindo o princípio de **Privacy by Design**.
-- Nenhum dado médico é comercializado ou compartilhado para fins publicitários.
-- As chamadas de IA utilizam dados anonimizados estritamente voltados à assistência preventiva.
+- **Criptografia em Trânsito**: Todas as requisições utilizam HTTPS e TLS 1.3.
+- **Regras Firestore com RBAC**: Leitura e escrita de prontuários, aferições e logs restritas estritamente ao próprio paciente e a administradores autenticados.
+- **Tratamento Ético de Dados Médicos**: Nenhum dado clínico é comercializado. Dados enviados aos modelos de IA são anonimizados e restritos ao propósito de assistência pessoal informativa.
 
 ---
 
-## 📄 Licença e Isenção de Responsabilidade
+## 📄 Licença
 
-Este projeto está sob a licença **MIT** com aditivo de responsabilidade médica — consulte o arquivo [LICENSE](LICENSE) para detalhes completos.
-
-> ⚠️ **Aviso Médico Legal**: O KardIA é uma ferramenta de suporte ao monitoramento preventivo e **NÃO substitui consulta médica, diagnóstico clínico ou prescrição terapêutica**. Em caso de emergência ou crise hipertensiva, procure imediatamente atendimento médico especializado.
+Este projeto é de uso proprietário e confidencial. Todos os direitos reservados.
