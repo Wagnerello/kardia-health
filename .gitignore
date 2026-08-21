@@ -1,0 +1,41 @@
+# Logs e Debug
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependências
+node_modules/
+
+# Builds e Distribuição
+dist/
+dist-ssr/
+*.local
+
+# Variáveis de Ambiente e Segredos (CRÍTICO PARA SEGURANÇA)
+.env
+.env.*
+!.env.example
+serviceAccountKey.json
+*.pem
+*.key
+*.cert
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Diretórios de IDEs e Editores
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

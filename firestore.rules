@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Função para verificar se o usuário é admin via Custom Claims
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Usuários podem ler e escrever seus próprios documentos
+    match /users/{userId} {
+      allow read, write: if request.auth != null && (request.auth.uid == userId || isAdmin());
+    }
+    
+    // Aferições de pressão
+    match /bp_readings/{readingId} {
+      allow read, update, delete: if request.auth != null && (request.auth.uid == resource.data.user_id || isAdmin());
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.user_id;
+    }
+
+    // Registros de Água
+    match /water_logs/{logId} {
+      allow read, update, delete: if request.auth != null && (request.auth.uid == resource.data.user_id || isAdmin());
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.user_id;
+    }
+
+    // Aferições de glicemia
+    match /glicemia_readings/{readingId} {
+      allow read, update, delete: if request.auth != null && (request.auth.uid == resource.data.user_id || isAdmin());
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.user_id;
+    }
+
+    // Medicações e Suplementos
+    match /user_medications/{medId} {
+      allow read, update, delete: if request.auth != null && (request.auth.uid == resource.data.user_id || isAdmin());
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.user_id;
+    }
+
+    // Laudos
+    match /laudos/{laudoId} {
+      allow read, update, delete: if request.auth != null && (request.auth.uid == resource.data.user_id || isAdmin());
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.user_id;
+    }
+
+    // Histórico de peso
+    match /weight_history/{weightId} {
+      allow read, update, delete: if request.auth != null && (request.auth.uid == resource.data.user_id || isAdmin());
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.user_id;
+    }
+
+    // Análises diárias da IA
+    match /analises_diarias/{analiseId} {
+      allow read, update, delete: if request.auth != null && (request.auth.uid == resource.data.user_id || isAdmin());
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.user_id;
+    }
+
+    // Logs de atividade do Admin
+    match /admin_logs/{logId} {
+      allow read, write: if isAdmin();
+    }
+
+    // Configurações globais do sistema
+    match /config/{configId} {
+      allow read: if request.auth != null;
+      allow write: if isAdmin();
+    }
+  }
+}
