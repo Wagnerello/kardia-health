@@ -1,6 +1,7 @@
 <div align="center">
 
-# ❤️ KardIA — Assistente de Saúde Preventiva (Open Source)
+# ❤️ KardIA — Assistente de Saúde Preventiva 
+(Open Source)
 
 **Plataforma Inteligente de Monitoramento Cardiovascular, Metabólico e Gestão Preventiva de Saúde com Inteligência Artificial.**
 
