@@ -1,13 +1,11 @@
 /**
  * Configuração centralizada dos modelos de IA (Google Gemini)
- * com mecanismo de fallback automático em cascata.
- *
- * Estratégia de seleção de modelos (Julho 2026):
- *  - gemini-3.5-flash → Primário: visão + raciocínio, alta qualidade
- *  - gemini-3.1-pro   → Fallback: raciocínio avançado, mais lento
- *  - gemini-3.1-flash-lite → Fallback econômico: rápido e barato
+ * com suporte a execução Server-Side (Cloud Functions) e
+ * mecanismo de fallback automático em cascata (Gemini -> Groq).
  */
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { httpsCallable } from 'firebase/functions';
+import { functions } from '../firebase';
 
 export const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || '');
 
@@ -18,21 +16,39 @@ export const OCR_MODELS = [
 ];
 
 // ── Modelos para Análise/Raciocínio ─────────────────────────────
-// Somente texto. O Groq (Llama) é acionado automaticamente se todos falharem.
 export const ANALISE_MODELS = [
   'gemini-2.0-flash',       // Primário estável
   'gemini-1.5-flash',       // Fallback leve e rápido
 ];
 
-// ── Erros que devem acionar o fallback ─────────────────────────
-// Inclui: sem cota (429), modelo indisponível (503/404), timeout
+/**
+ * Tenta executar a análise via Cloud Function (Backend Server-Side Seguro).
+ * Se o backend responder, a execução é feita sem expor chaves no cliente.
+ */
+export async function executarViaCloudFunction(
+  prompt: string,
+  imageBase64?: string,
+  mimeType?: string
+): Promise<{ text: string; modelName: string }> {
+  const callable = httpsCallable<
+    { prompt: string; imageBase64?: string; mimeType?: string },
+    { result: string; provider: string; model: string }
+  >(functions, 'analyzeData');
+
+  const response = await callable({ prompt, imageBase64, mimeType });
+  if (response.data?.result) {
+    return {
+      text: response.data.result,
+      modelName: `${response.data.provider}/${response.data.model} (server-side)`,
+    };
+  }
+  throw new Error('Resposta vazia da Cloud Function.');
+}
 
 /**
  * Realiza uma chamada de fallback para a API do Groq usando o modelo Llama-3.3-70b-versatile.
- * NOTA DE SEGURANÇA: O uso do Groq via client-side expoem a VITE_GROQ_API_KEY no bundle.
- * Idealmente, esta chamada deve ser migrada para uma Cloud Function no futuro.
  */
-async function chamarGroqFallback(prompt: string): Promise<string> {
+export async function chamarGroqFallback(prompt: string): Promise<string> {
   const groqApiKey = import.meta.env.VITE_GROQ_API_KEY || '';
   if (!groqApiKey) {
     throw new Error('Chave do Groq não configurada.');
@@ -73,19 +89,33 @@ async function chamarGroqFallback(prompt: string): Promise<string> {
 
 /**
  * Executa uma chamada Gemini com fallback automático em cascata.
- * Se o modelo primário falhar com erro recuperável, tenta o próximo.
- * Se todos os modelos do Gemini falharem, tenta usar o Groq como fallback final de texto.
+ * 1. Se prompt for fornecido, tenta executar primeiro via Cloud Function (Server-Side).
+ * 2. Se a Cloud Function não estiver disponível, tenta a cascata de modelos Gemini no cliente.
+ * 3. Se todos os modelos do Gemini falharem, tenta usar o Groq como fallback final de texto.
  *
  * @param modelos Lista de models a tentar, em ordem de prioridade
  * @param executor Função que recebe o nome do modelo e retorna a Promise
- * @param prompt Opcional. Prompt original para ser enviado ao Groq se o Gemini falhar
- * @returns O resultado do primeiro modelo que responder com sucesso
+ * @param prompt Opcional. Prompt original para ser enviado à Cloud Function ou Groq
+ * @returns O resultado do primeiro provedor/modelo que responder com sucesso
  */
 export async function comFallback<T>(
   modelos: string[],
   executor: (modelName: string) => Promise<T>,
   prompt?: string
 ): Promise<T> {
+  // 1. Camada Primária: Server-Side Cloud Function (quando prompt estiver presente)
+  if (prompt && typeof prompt === 'string' && prompt.length > 0) {
+    try {
+      console.info('[IA] Tentando execução via Cloud Function (server-side)...');
+      const cfResult = await executarViaCloudFunction(prompt);
+      console.info('[IA] Sucesso via Cloud Function server-side!');
+      return cfResult as unknown as T;
+    } catch (cfErr: any) {
+      console.warn('[IA] Cloud Function indisponível ou offline. Ativando cascata do cliente:', cfErr?.message);
+    }
+  }
+
+  // 2. Cascata Local do Cliente (Google Gemini)
   let ultimoErro: Error | null = null;
 
   for (const modelName of modelos) {
@@ -109,11 +139,10 @@ export async function comFallback<T>(
     }
   }
 
-  // Tenta o Groq como último fallback se o prompt de texto for fornecido
+  // 3. Fallback Final de Texto (Groq / Llama)
   if (prompt) {
     try {
       const text = await chamarGroqFallback(prompt);
-      // Se a função esperava um objeto { text, modelName }, formata adequadamente
       return { text, modelName: 'groq/llama-3.3-70b-versatile' } as unknown as T;
     } catch (groqErr: any) {
       console.error('[IA] Fallback do Groq também falhou:', groqErr?.message);
@@ -123,4 +152,5 @@ export async function comFallback<T>(
 
   throw ultimoErro || new Error('[IA] Todos os modelos e fallbacks falharam. Verifique sua conexão ou chave de API.');
 }
+
 

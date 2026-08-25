@@ -19,6 +19,11 @@ import { obterDicaPressao, obterDicaGlicemia, obterDicaHidratacao } from './util
 import type { Dica, ContextoSaude } from './utils/dicas';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
+import { initTelemetry } from './services/telemetry';
+
+// Inicializar telemetria e observabilidade de erros globais
+initTelemetry();
+
 Chart.register(...registerables);
 
 // Versão do aplicativo
