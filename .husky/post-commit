@@ -1,0 +1,2 @@
+node scripts/append-tech-changelog.mjs
+graphify update . || true

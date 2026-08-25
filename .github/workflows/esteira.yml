@@ -1,0 +1,46 @@
+name: Esteira
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  audit:
+    name: Auditoria da esteira
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Validar mensagens de commit (Conventional Commits)
+        run: npx commitlint --from=origin/main~1 --to=HEAD || true
+
+      - name: Executar testes unitários (Vitest)
+        run: npm test
+
+      - name: Auditoria de dependências
+        run: npm audit --audit-level=high || true
+
+      - name: Validar estrutura da esteira
+        run: node scripts/audit-esteira.mjs .
+
+      - name: Validar diagramas Mermaid
+        run: node scripts/validate-mermaid.mjs .
+
+      - name: Eval de fidelidade spec→implementação
+        run: node scripts/eval-spec-fidelity.mjs .
