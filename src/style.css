@@ -2341,4 +2341,262 @@ select.input-field {
   }
 }
 
+/* ==========================================================================
+   MULTI-STEP LOADING OVERLAY (@impeccable)
+   Feedback visual rico e progressivo para IA clínica e processamento
+   ========================================================================== */
+
+.loading-steps-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: loadingFadeIn 0.25s ease-out;
+}
+
+.loading-steps-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.loading-steps-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(15, 23, 42, 0.05);
+  width: 100%;
+  max-width: 520px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: loadingSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.loading-steps-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.loading-steps-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(29, 78, 216, 0.08);
+  color: var(--primary);
+  border: 1px solid rgba(29, 78, 216, 0.18);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.loading-steps-badge .pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 0 0 rgba(29, 78, 216, 0.7);
+  animation: badgeDotPulse 1.8s infinite;
+}
+
+@keyframes badgeDotPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(29, 78, 216, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(29, 78, 216, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(29, 78, 216, 0); }
+}
+
+.loading-steps-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.loading-steps-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Barra de Progresso Geral */
+.loading-progress-container {
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.loading-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.loading-progress-label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.loading-progress-percent {
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.loading-progress-track {
+  width: 100%;
+  height: 6px;
+  background: var(--border);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.loading-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, #3b82f6 100%);
+  border-radius: 9999px;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Lista de Etapas */
+.loading-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.loading-step-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.loading-step-indicator {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.loading-step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.loading-step-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.loading-step-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+/* Estado: Pendente */
+.step-pending .loading-step-indicator {
+  background: var(--bg-card2);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.step-pending .loading-step-label {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Estado: Ativo */
+.step-active {
+  background: rgba(29, 78, 216, 0.05);
+  border-color: rgba(29, 78, 216, 0.2);
+}
+.step-active .loading-step-indicator {
+  background: var(--primary);
+  color: #ffffff;
+}
+.step-active .loading-step-label {
+  color: var(--primary);
+  font-weight: 800;
+}
+.step-active .loading-step-sub {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* Estado: Concluído */
+.step-completed {
+  background: rgba(5, 150, 105, 0.04);
+  border-color: rgba(5, 150, 105, 0.15);
+}
+.step-completed .loading-step-indicator {
+  background: #059669;
+  color: #ffffff;
+}
+.step-completed .loading-step-label {
+  color: #065f46;
+  font-weight: 700;
+}
+.step-completed .loading-step-sub {
+  color: #047857;
+}
+
+/* Spinner animado da etapa ativa */
+.loading-step-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: stepSpin 0.75s linear infinite;
+}
+
+@keyframes stepSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes loadingFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes loadingSlideUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+
 

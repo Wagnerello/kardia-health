@@ -1511,27 +1511,82 @@
 
           <!-- SUB-ABA 2: GESTÃO DE USUÁRIOS -->
           <div id="admin-sec-users" style="display:none;">
-            <div class="admin-table-controls">
-              <input type="text" id="admin-search-user" class="admin-search-input"
-                placeholder="🔍 Buscar por nome ou e-mail..." oninput="filtrarTabelaUsuariosAdmin()" />
-              <select id="admin-filter-status" class="admin-filter-select" onchange="filtrarTabelaUsuariosAdmin()">
-                <option value="todos">Todos os Status</option>
-                <option value="Ativo">Ativo</option>
-                <option value="Pendente">Pendente</option>
-                <option value="Suspenso">Suspenso</option>
-                <option value="Inativo">Inativo</option>
-              </select>
-              <select id="admin-filter-plano" class="admin-filter-select" onchange="filtrarTabelaUsuariosAdmin()">
-                <option value="todos">Todos os Planos</option>
-                <option value="Gratuito">Gratuito</option>
-                <option value="Premium">Premium</option>
-                <option value="Ouro">Ouro</option>
-              </select>
+            <!-- Visão 1: Listagem de Usuários -->
+            <div id="admin-sec-users-list">
+              <div class="admin-table-controls">
+                <input type="text" id="admin-search-user" class="admin-search-input"
+                  placeholder="🔍 Buscar por nome ou e-mail..." oninput="filtrarTabelaUsuariosAdmin()" />
+                <select id="admin-filter-status" class="admin-filter-select" onchange="filtrarTabelaUsuariosAdmin()">
+                  <option value="todos">Todos os Status</option>
+                  <option value="Ativo">Ativo</option>
+                  <option value="Pendente">Pendente</option>
+                  <option value="Suspenso">Suspenso</option>
+                  <option value="Inativo">Inativo</option>
+                </select>
+                <select id="admin-filter-plano" class="admin-filter-select" onchange="filtrarTabelaUsuariosAdmin()">
+                  <option value="todos">Todos os Planos</option>
+                  <option value="Gratuito">Gratuito</option>
+                  <option value="Premium">Premium</option>
+                  <option value="Ouro">Ouro</option>
+                </select>
+              </div>
+
+              <!-- LISTA DE USUÁRIOS EM CARDS -->
+              <div id="admin-users-cards-view" class="admin-users-grid">
+                <!-- Populado via JS em formato de Cards -->
+              </div>
             </div>
 
-            <!-- LISTA DE USUÁRIOS EM CARDS -->
-            <div id="admin-users-cards-view" class="admin-users-grid">
-              <!-- Populado via JS em formato de Cards -->
+            <!-- Visão 2: MODO JANELA INTEGRADA DO HISTÓRICO & CRUD DE LAUDOS DO PACIENTE -->
+            <div id="admin-user-history-view" class="hidden" style="display:none;">
+              <!-- Barra de Navegação Superior da Janela -->
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
+                <button class="btn btn-secondary" onclick="fecharJanelaHistoricoAdmin()" style="display:flex; align-items:center; gap:8px; font-weight:600;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                  </svg>
+                  Voltar à Lista de Usuários
+                </button>
+                <div id="admin-history-view-title" style="font-size:16px; font-weight:700; color:var(--text);">
+                  Histórico &amp; Laudos Clínicos
+                </div>
+              </div>
+
+              <!-- Card de Perfil Clínico do Paciente -->
+              <div id="admin-history-patient-card" class="card" style="margin-bottom:20px; background:var(--bg-card); border:1px solid var(--border);">
+                <!-- Preenchido via renderizarHeaderPacienteAdmin() -->
+              </div>
+
+              <!-- Seletor de Abas Internas da Janela -->
+              <div class="dashboard-tab-switcher" style="margin-bottom:16px;">
+                <button id="admin-hist-tab-laudos" class="dashboard-tab active" onclick="trocarAbaJanelaHistoricoAdmin('laudos')">
+                  📋 Laudos Clínicos (CRUD IA)
+                </button>
+                <button id="admin-hist-tab-pressao" class="dashboard-tab" onclick="trocarAbaJanelaHistoricoAdmin('pressao')">
+                  📊 Aferições &amp; Gráficos
+                </button>
+                <button id="admin-hist-tab-outros" class="dashboard-tab" onclick="trocarAbaJanelaHistoricoAdmin('outros')">
+                  💧 Hidratação &amp; 🩸 Glicemia
+                </button>
+              </div>
+
+              <!-- Conteúdo da Aba 1: Laudos (CRUD) -->
+              <div id="admin-hist-sec-laudos" style="display:block;">
+                <div id="admin-hist-laudos-container">
+                  <!-- Preenchido via renderizarCrudLaudosAdmin() -->
+                </div>
+              </div>
+
+              <!-- Conteúdo da Aba 2: Pressão e Gráficos -->
+              <div id="admin-hist-sec-pressao" style="display:none;">
+                <!-- Preenchido via renderizarAbaPressaoAdmin() -->
+              </div>
+
+              <!-- Conteúdo da Aba 3: Outros Sinais -->
+              <div id="admin-hist-sec-outros" style="display:none;">
+                <!-- Preenchido via renderizarAbaOutrosSinaisAdmin() -->
+              </div>
             </div>
           </div>
 
@@ -1942,6 +1997,9 @@
           </div>
         </div>
         <div style="display: flex; gap: 8px; align-items: center;">
+          <button class="btn btn-primary" id="btn-modal-abrir-janela" onclick="abrirLaudoModalEmNovaJanela()" style="padding: 6px 12px; font-size: 12px; display: flex; align-items: center; gap: 4px;" title="Abrir laudo completo em nova janela">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Nova Janela
+          </button>
           <button class="btn btn-outline" id="btn-modal-copiar-laudo" onclick="copiarLaudoModalAtual()" style="padding: 6px 12px; font-size: 12px; display: flex; align-items: center; gap: 4px;">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar
           </button>
@@ -1960,18 +2018,92 @@
     </div>
   </div>
 
+  <!-- MODAL DE EDIÇÃO DE LAUDO (CRUD - UPDATE) -->
+  <div id="modal-editar-laudo" class="modal-overlay hidden" style="z-index: 10001;" role="dialog" aria-modal="true" aria-labelledby="modal-editar-laudo-title">
+    <div class="modal" style="max-width: 680px; width: 92%; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--border); padding: 16px 20px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+            <path d="m15 5 4 4"/>
+          </svg>
+          <h3 class="modal-title" id="modal-editar-laudo-title" style="font-size: 16px; font-weight: 700;">Editar Laudo Clínico</h3>
+        </div>
+        <button class="modal-close" aria-label="Fechar" onclick="fecharModalEditarLaudo()">✕</button>
+      </div>
+      <form id="form-editar-laudo" onsubmit="event.preventDefault(); salvarEdicaoLaudoUI();" style="display: flex; flex-direction: column; flex: 1; overflow: hidden; padding: 20px; gap: 16px;">
+        <input type="hidden" id="editar-laudo-id" />
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="editar-laudo-periodo" style="font-size: 13px; font-weight: 600;">Título / Período da Avaliação</label>
+          <input type="text" id="editar-laudo-periodo" class="form-input" style="padding: 8px 12px; font-size: 13px; border-radius: 8px;" placeholder="Ex: Últimos 30 dias (ou Avaliação Cardiológica)" required />
+        </div>
+        <div class="form-group" style="display: flex; flex-direction: column; flex: 1; margin-bottom: 0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="form-label" for="editar-laudo-conteudo" style="font-size: 13px; font-weight: 600; margin-bottom: 0;">Conteúdo e Recomendações (Markdown aceito)</label>
+            <span style="font-size: 11px; color: var(--text-muted);">Edição livre do parecer médico</span>
+          </div>
+          <textarea id="editar-laudo-conteudo" class="form-input" style="flex: 1; min-height: 240px; font-family: inherit; font-size: 13px; line-height: 1.6; padding: 12px; border-radius: 8px; resize: vertical;" placeholder="Escreva ou ajuste as recomendações, análises clínicas e condutas..." required></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; border-top: 1px solid var(--border); padding-top: 16px;">
+          <button type="button" class="btn btn-secondary" onclick="fecharModalEditarLaudo()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-salvar-edicao-laudo" style="display: flex; align-items: center; gap: 6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Salvar Alterações
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL DE CRIAÇÃO MANUAL DE LAUDO (CRUD - CREATE MANUAL) -->
+  <div id="modal-criar-laudo-manual" class="modal-overlay hidden" style="z-index: 10001;" role="dialog" aria-modal="true" aria-labelledby="modal-criar-laudo-title">
+    <div class="modal" style="max-width: 680px; width: 92%; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--border); padding: 16px 20px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          <h3 class="modal-title" id="modal-criar-laudo-title" style="font-size: 16px; font-weight: 700;">Nova Nota / Laudo Clínico</h3>
+        </div>
+        <button class="modal-close" aria-label="Fechar" onclick="fecharModalCriarLaudoManual()">✕</button>
+      </div>
+      <form id="form-criar-laudo-manual" onsubmit="event.preventDefault(); salvarCriacaoLaudoManualUI();" style="display: flex; flex-direction: column; flex: 1; overflow: hidden; padding: 20px; gap: 16px;">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="criar-laudo-periodo" style="font-size: 13px; font-weight: 600;">Título / Identificação do Registro</label>
+          <input type="text" id="criar-laudo-periodo" class="form-input" style="padding: 8px 12px; font-size: 13px; border-radius: 8px;" placeholder="Ex: Consulta Cardiológica de Rotina / Parecer Especializado" required />
+        </div>
+        <div class="form-group" style="display: flex; flex-direction: column; flex: 1; margin-bottom: 0;">
+          <label class="form-label" for="criar-laudo-conteudo" style="font-size: 13px; font-weight: 600; margin-bottom: 6px;">Parecer Médico e Orientações</label>
+          <textarea id="criar-laudo-conteudo" class="form-input" style="flex: 1; min-height: 240px; font-family: inherit; font-size: 13px; line-height: 1.6; padding: 12px; border-radius: 8px; resize: vertical;" placeholder="Descreva os achados clínicos, orientações dietéticas, metas de PA e recomendações terapêuticas..." required></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; border-top: 1px solid var(--border); padding-top: 16px;">
+          <button type="button" class="btn btn-secondary" onclick="fecharModalCriarLaudoManual()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-salvar-criar-laudo-manual" style="display: flex; align-items: center; gap: 6px; background: var(--accent); border-color: var(--accent);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+            Salvar no Histórico
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAIS GLOBAIS -->
-  <div id="modal-confirmacao" class="modal-overlay hidden">
+  <div id="modal-confirmacao" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
     <div class="modal">
       <div class="modal-header">
         <h3 class="modal-title" id="confirm-title">Confirmação</h3>
-        <button class="modal-close" aria-label="Fechar" onclick="fecharModalConfirmacao()">×</button>
+        <button class="modal-close" aria-label="Fechar janela" onclick="fecharModalConfirmacao()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
       </div>
-      <div class="modal-body" style="text-align:center; padding:32px 16px;">
-        <p id="confirm-message" style="font-size:16px; color:var(--text-color); margin-bottom:24px;"></p>
+      <div class="modal-body" style="text-align:center; padding:24px 16px;">
+        <p id="confirm-message" style="font-size:15px; color:var(--text); margin-bottom:24px; line-height: 1.5;"></p>
         <div style="display:flex; gap:12px; justify-content:center;">
-          <button class="btn btn-ghost" onclick="fecharModalConfirmacao()">Cancelar</button>
-          <button class="btn btn-primary" id="btn-confirm-action">Confirmar</button>
+          <button type="button" class="btn btn-ghost" onclick="fecharModalConfirmacao()">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btn-confirm-action" style="background:var(--danger);">Confirmar</button>
         </div>
       </div>
     </div>

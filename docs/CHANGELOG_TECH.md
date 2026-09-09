@@ -3,6 +3,7 @@
 Todas as alterações técnicas relevantes deste projeto são documentadas aqui no momento em que ocorrem, de forma granular por commit, independente de cortes de release.
 
 ## [Unreleased]
+- [fix] refatoracao e acessibilidade de perfil e medicacoes v2.1.1 (commit: 88abda2) — Refs: auto
 
 ## [2.1.1] - 2026-09-09
 - [ui/ux] Correções completas da auditoria técnica Impeccable no módulo de Perfil e Medicações: contenção de largura do botão `+ Nova Medicação` (eliminando o esticamento indevido de `.btn-primary` em cabeçalhos flexbox)

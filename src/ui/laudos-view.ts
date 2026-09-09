@@ -219,6 +219,9 @@ export function toggleLaudosMesGroup(groupId: string): void {
   }
 }
 
+import { mostrarLoadingPassos, atualizarLoadingPasso, fecharLoadingPassos } from './loading-steps';
+import { abrirLaudoEmNovaJanela } from './laudo-window';
+
 interface ObterMarkdownLaudoOpts {
   uid: string;
   perfil: UserProfile;
@@ -233,6 +236,7 @@ async function obterMarkdownLaudo(opts: ObterMarkdownLaudoOpts): Promise<string>
   const isHipertenso = perfil.hipertenso !== false;
 
   if (isHipertenso && isDiabetico) {
+    atualizarLoadingPasso(3, 4, 'Processando cruzamento metabólico (glicemia + pressão)...');
     return await gerarLaudoIntegradoIA({
       afericoesPressao: pressao,
       leiturasGlicemia: glicemia,
@@ -243,7 +247,10 @@ async function obterMarkdownLaudo(opts: ObterMarkdownLaudoOpts): Promise<string>
   }
 
   const { gerarRelatorioCondutaOMS } = await import('../services/laudos');
-  return await gerarRelatorioCondutaOMS(uid, perfil, dias);
+  const res = await gerarRelatorioCondutaOMS(uid, perfil, dias, (etapa, total, msg) => {
+    atualizarLoadingPasso(etapa, total, msg);
+  });
+  return res.text;
 }
 
 async function atualizarUiResultadoLaudo(markdownText: string) {
@@ -267,24 +274,55 @@ export const gerarLaudoTelaIntegrado = async (): Promise<void> => {
   if (!btn || !container) return;
 
   btn.disabled = true;
-  btn.innerHTML = '<svg class="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px; animation: spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Analisando histórico integrado...';
   container.classList.add('hidden');
 
+  const nomeUsuario = state.userProfile.nome || state.currentUser.displayName || 'Paciente';
+
+  mostrarLoadingPassos(
+    'Gerando Relatório de Saúde Integrado',
+    'A inteligência médica está correlacionando seu histórico completo de sinais vitais'
+  );
+
   try {
+    atualizarLoadingPasso(1, 4, 'Buscando registros de pressão e glicemia...');
     const [pressao, glicemia] = await Promise.all([
       buscarAfericoes(state.currentUser.uid, dias),
       buscarGlicemias(state.currentUser.uid, dias)
     ]);
 
     if (pressao.length === 0 && glicemia.length === 0) {
+      fecharLoadingPassos();
       mostrarToast('Sem medições suficientes para gerar o laudo.', 'error');
       return;
     }
 
+    atualizarLoadingPasso(2, 4, 'Cruzando sinais vitais com parâmetros da OMS/SBC...');
     const markdownText = await obterMarkdownLaudo({ uid: state.currentUser.uid, perfil: state.userProfile, dias, pressao, glicemia });
+    
+    atualizarLoadingPasso(4, 4, 'Finalizando laudo e estruturando recomendações...');
     await atualizarUiResultadoLaudo(markdownText);
     await carregarLaudos();
+
+    fecharLoadingPassos();
+
+    // Abrir em nova janela para visualização e impressão completa
+    abrirLaudoEmNovaJanela({
+      titulo: 'Relatório Clínico Integrado',
+      conteudoMarkdown: markdownText,
+      nomePaciente: nomeUsuario,
+      diasAnalisados: dias,
+      modeloUsado: 'Gemini 2.5 Flash',
+      detalhesClinicos: {
+        idade: state.userProfile.idade,
+        sexo: state.userProfile.sexo,
+        peso: state.userProfile.peso,
+        altura: state.userProfile.altura
+      }
+    });
+
+    mostrarToast('Laudo gerado com sucesso e aberto em nova janela!', 'success');
   } catch (err) {
+    fecharLoadingPassos();
     logger.error(err);
     mostrarToast('Erro ao gerar laudo.', 'error');
   } finally {

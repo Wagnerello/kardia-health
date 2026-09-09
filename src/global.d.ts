@@ -81,6 +81,7 @@ declare global {
     toggleLaudosMesGroup: (groupId: string) => void;
     gerarLaudoTela: () => Promise<void>;
     abrirModalVisualizarLaudo: (id: string) => Promise<void>;
+    abrirLaudoModalEmNovaJanela: () => void;
     abrirModalUltimoLaudo: () => Promise<void>;
     fecharModalVisualizarLaudo: () => void;
     copiarLaudoModalAtual: () => void;
@@ -117,14 +118,46 @@ declare global {
     alterarPlanoUsuarioAdmin: (uid: string, plano: string, email: string) => Promise<void>;
     alterarStatusUsuarioAdmin: (uid: string, status: string, email: string) => Promise<void>;
     alterarRoleUsuarioAdmin: (uid: string, role: string, email: string) => Promise<void>;
-    excluirUsuarioAdmin: (uid: string, nome: string, email: string) => Promise<void>;
+    excluirUsuarioAdmin: (uid: string, nome: string, email: string) => void;
     abrirDetalhesUsuarioAdmin: (uid: string) => void;
     fecharModalAdminUserDetail: () => void;
+    carregarLogsAdminUI: () => Promise<void>;
+    salvarConfiguracoesAdminUI: () => Promise<void>;
     abrirHistoricoUsuarioAdmin: (uid: string, nome: string) => Promise<void>;
     fecharHistoricoUsuarioAdmin: () => void;
     gerarLaudoDoUsuarioAdmin: () => Promise<void>;
-    carregarLogsAdminUI: () => Promise<void>;
-    salvarConfiguracoesAdminUI: () => Promise<void>;
+    abrirLaudoSalvoAdminPorDados: (laudoJson: string, nomePaciente: string, perfilJson: string) => void;
+
+    // Admin Janela de Histórico & CRUD de Laudos
+    abrirJanelaHistoricoAdmin: (uid: string, nome: string) => Promise<void>;
+    fecharJanelaHistoricoAdmin: () => void;
+    trocarAbaJanelaHistoricoAdmin: (aba: 'laudos' | 'pressao' | 'outros') => void;
+    aoMudarPresetPeriodoAdmin: (val: string) => void;
+    executarGeracaoLaudoAdmin: () => Promise<void>;
+    visualizarLaudoAdminInline: (laudoId: string) => Promise<void>;
+    fecharViewerLaudoAdmin: () => void;
+    abrirEditorLaudoAdmin: (laudoId: string) => void;
+    salvarEdicaoLaudoAdmin: (laudoId: string) => Promise<void>;
+    abrirModalCriarLaudoManualAdmin: () => void;
+    salvarCriacaoLaudoManualAdmin: () => Promise<void>;
+    inativarLaudoAdminUI: (laudoId: string) => void;
+    reativarLaudoAdminUI: (laudoId: string) => Promise<void>;
+    excluirLaudoAdminPermanenteUI: (laudoId: string) => void;
+    copiarTextoLaudoAdmin: (laudoId: string) => void;
+    exportarLaudoAdminParaPDF: (laudoId: string) => Promise<void>;
+    recarregarLaudosAdminAtual: () => Promise<void>;
+    focarGeradorLaudoAdmin: () => void;
+    exportarHistoricoCompletoAdminPDF: () => Promise<void>;
+
+    // Laudos Modais e Ações CRUD Globais
+    excluirLaudoPermanenteUI: (laudoId: string, cb?: () => Promise<void>) => void;
+    abrirModalEditarLaudo: (id: string) => void;
+    fecharModalEditarLaudo: () => void;
+    salvarEdicaoLaudoUI: () => Promise<void>;
+    abrirModalCriarLaudoManualUI: () => void;
+    fecharModalCriarLaudoManual: () => void;
+    salvarCriacaoLaudoManualUI: () => Promise<void>;
+
     adminLeiturasCache?: BpReading[];
   }
 }

@@ -24,6 +24,7 @@ import './ui/imc-view';
 import './ui/laudos-view';
 import './ui/history-view';
 import './ui/admin-view';
+import './ui/admin-user-history-view';
 import './ui/pdf-export';
 
 Chart.register(...registerables);
