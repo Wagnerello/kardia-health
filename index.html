@@ -659,6 +659,17 @@
 
       <!-- Sidebar Desktop -->
       <aside class="desktop-sidebar">
+        <!-- CTA Principal: Novo Registro no Topo -->
+        <div id="sb-fab-container" class="sidebar-top-action">
+          <button class="sidebar-fab" id="fab-main-btn" onclick="abrirModalEscolhaRegistro()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg> <span>Novo Registro</span>
+          </button>
+        </div>
+
         <div class="sidebar-group-label" id="sb-user-group-label">Principal</div>
         <button class="sidebar-item active" id="sb-dashboard" onclick="mostrarPagina('dashboard')">
           <span class="item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -696,30 +707,24 @@
             </svg></span> Painel Admin
         </button>
 
-        <div class="sidebar-group-label">Conta</div>
-        <button class="sidebar-item" id="sb-perfil" onclick="mostrarPagina('perfil')">
-          <span class="item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg></span> Meu Perfil
-        </button>
-        <button class="sidebar-item" onclick="fazerLogout()" style="color:var(--danger)">
-          <span class="item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-              <polyline points="16 17 21 12 16 7" />
-              <line x1="21" x2="9" y1="12" y2="12" />
-            </svg></span> Sair
-        </button>
-        <div id="sb-fab-container">
-          <button class="sidebar-fab" id="fab-main-btn" onclick="abrirModalEscolhaRegistro()"
-            style="display:flex; align-items:center; justify-content:center; gap:8px; width:100%;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg> <span>Novo Registro</span>
+        <!-- Seção Conta ancorada no rodapé da Sidebar -->
+        <div class="sidebar-footer">
+          <div class="sidebar-divider"></div>
+          <div class="sidebar-group-label">Conta</div>
+          <button class="sidebar-item" id="sb-perfil" onclick="mostrarPagina('perfil')">
+            <span class="item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg></span> Meu Perfil
+          </button>
+          <button class="sidebar-item sidebar-item-danger" onclick="fazerLogout()">
+            <span class="item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" x2="9" y1="12" y2="12" />
+              </svg></span> Sair
           </button>
         </div>
       </aside>
@@ -739,14 +744,24 @@
           </div>
 
           <!-- Toggle IMC / Hidratação / Pressão / Glicemia -->
-          <div class="dashboard-tab-switcher">
+          <div class="dashboard-tab-switcher dashboard-tab-switcher--icon">
             <button id="tab-btn-hidratacao" class="dashboard-tab active"
-              onclick="mostrarAbaDashboard('hidratacao')">Hidratação</button>
-            <button id="tab-btn-imc" class="dashboard-tab" onclick="mostrarAbaDashboard('imc')">IMC e Peso</button>
-            <button id="tab-btn-pressao" class="dashboard-tab" onclick="mostrarAbaDashboard('pressao')">Pressão
-              Arterial</button>
-            <button id="tab-btn-glicemia" class="dashboard-tab"
-              onclick="mostrarAbaDashboard('glicemia')">Glicemia</button>
+              onclick="mostrarAbaDashboard('hidratacao')">
+              <svg class="tab-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
+              <span class="tab-label">Hidratação</span>
+            </button>
+            <button id="tab-btn-imc" class="dashboard-tab" onclick="mostrarAbaDashboard('imc')">
+              <svg class="tab-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/></svg>
+              <span class="tab-label">IMC e Peso</span>
+            </button>
+            <button id="tab-btn-pressao" class="dashboard-tab" onclick="mostrarAbaDashboard('pressao')">
+              <svg class="tab-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>
+              <span class="tab-label">Pressão Arterial</span>
+            </button>
+            <button id="tab-btn-glicemia" class="dashboard-tab" onclick="mostrarAbaDashboard('glicemia')">
+              <svg class="tab-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 3-4 8-4 8S8 9 8 6a4 4 0 0 1 4-4z"/><circle cx="12" cy="6" r="1"/><path d="M8 16a4 4 0 0 0 8 0"/></svg>
+              <span class="tab-label">Glicemia</span>
+            </button>
           </div>
 
           <!-- Conteúdo dinâmico -->
@@ -1108,38 +1123,43 @@
 
         <!-- HISTÓRICO -->
         <div id="page-historico" class="hidden">
-          <div class="page-header" style="flex-wrap: wrap; gap: 16px;">
+          <div class="page-header">
             <div>
               <div class="page-title">Histórico</div>
               <div class="page-subtitle">Todas as suas aferições registradas</div>
             </div>
-            <div class="historico-filters-container"
-              style="display:flex;align-items:center;flex-wrap:wrap;gap:8px; width:100%;">
-              <select id="user-pdf-tipo" class="form-select"
-                style="padding: 6px 10px; font-size: 13px; border-radius: 8px; flex: 1; min-width: 120px;">
-                <option value="detalhado">Detalhado</option>
-                <option value="simplificado">Simplificado</option>
-              </select>
-              <div style="display:flex; align-items:center; gap:8px; flex: 2; min-width: 200px;">
-                <input type="date" id="user-pdf-inicio" class="form-input"
-                  style="padding: 6px 10px; font-size: 13px; border-radius: 8px; flex: 1;" title="Data Inicial" />
-                <span style="font-size: 13px; color: var(--text-muted);">até</span>
-                <input type="date" id="user-pdf-fim" class="form-input"
-                  style="padding: 6px 10px; font-size: 13px; border-radius: 8px; flex: 1;" title="Data Final" />
+          </div>
+
+          <!-- Filtros de exportação PDF -->
+          <div class="historico-filter-card">
+            <div class="historico-filter-row">
+              <div class="historico-filter-group">
+                <label class="form-label" for="user-pdf-tipo">Tipo de Relatório</label>
+                <select id="user-pdf-tipo" class="form-select historico-filter-select">
+                  <option value="detalhado">Detalhado</option>
+                  <option value="simplificado">Simplificado</option>
+                </select>
               </div>
-              <button class="btn btn-outline btn-pdf-export" onclick="exportarHistoricoParaPDF()"
-                id="btn-exportar-historico-pdf"
-                style="display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 16px;font-size:13px;font-weight:600;border-radius:10px; width: 100%;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                  <line x1="12" y1="18" x2="12" y2="12" />
-                  <line x1="9" y1="15" x2="15" y2="15" />
-                </svg>
-                Exportar PDF
-              </button>
+              <div class="historico-filter-group historico-filter-dates">
+                <label class="form-label">Período</label>
+                <div class="historico-date-row">
+                  <input type="date" id="user-pdf-inicio" class="form-input historico-filter-date" title="Data Inicial" />
+                  <span class="historico-date-sep">até</span>
+                  <input type="date" id="user-pdf-fim" class="form-input historico-filter-date" title="Data Final" />
+                </div>
+              </div>
             </div>
+            <button class="btn btn-outline btn-pdf-export historico-export-btn"
+              onclick="exportarHistoricoParaPDF()" id="btn-exportar-historico-pdf">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="12" y1="18" x2="12" y2="12" />
+                <line x1="9" y1="15" x2="15" y2="15" />
+              </svg>
+              Exportar PDF
+            </button>
           </div>
 
           <div id="historico-list">

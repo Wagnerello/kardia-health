@@ -3,7 +3,16 @@
 Todas as alterações técnicas relevantes deste projeto são documentadas aqui no momento em que ocorrem, de forma granular por commit, independente de cortes de release.
 
 ## [Unreleased]
-- [fix] refatoracao e acessibilidade de perfil e medicacoes v2.1.1 (commit: 88abda2) — Refs: auto
+
+## [2.3.0] - 2026-09-09
+- [ui/ux] Refatoração da sidebar desktop: botão primário `+ Novo Registro` movido para o topo (padrão SaaS — Lei de Fitts), eliminando risco de missclick com o botão `Sair`
+- [ui/ux] Seção `Conta` (Meu Perfil + Sair) ancorada no rodapé da sidebar com divisor visual elegante e isolamento seguro
+- [ui/ux] Botão `Sair` com feedback visual dedicado em vermelho suave (hover state `#fef2f2`) para ação destrutiva
+- [ui/ux] Abas do Dashboard (Hidratação, IMC e Peso, Pressão Arterial, Glicemia) redesenhadas com padrão `Expandable Icon Tabs`: ícone SVG compacto quando inativa, expansão animada `cubic-bezier` com ícone + texto ao ativar
+- [ui/ux] Eliminação total da scrollbar horizontal nas abas do Dashboard mobile (`overflow: hidden` + `flex: 0 0 auto`)
+- [ui/ux] Escopo CSS isolado via classe modificadora `.dashboard-tab-switcher--icon` — abas de Perfil e Admin não afetadas
+- [ui/ux] Redesign completo do cabeçalho de Filtros do Histórico: componentes separados em um card com `flex-direction: column` para melhor respiração visual, espaçamento de touch targets e correção de padding inferior do layout
+- [quality] 31/31 testes unitários passando
 
 ## [2.1.1] - 2026-09-09
 - [ui/ux] Correções completas da auditoria técnica Impeccable no módulo de Perfil e Medicações: contenção de largura do botão `+ Nova Medicação` (eliminando o esticamento indevido de `.btn-primary` em cabeçalhos flexbox)
