@@ -1,3 +1,4 @@
+import { logger } from '../services/logger';
 /**
  * Serviço de OCR para leitura de medidores de pressão arterial.
  * Usa o Google Gemini com fallback automático de modelos.
@@ -52,7 +53,7 @@ export const processarImagemOCR = async (imagemBase64: string, mimeType: string 
         {
           inlineData: {
             data: imagemBase64,
-            mimeType: mimeType as any,
+            mimeType,
           },
         },
       ]);
@@ -74,11 +75,12 @@ export const processarImagemOCR = async (imagemBase64: string, mimeType: string 
       modelo_usado: resultado.modelName,
     };
 
-  } catch (error: any) {
-    console.error('[OCR] Todos os modelos falharam:', error);
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    logger.error('[OCR] Todos os modelos falharam:', error);
     return {
       confianca: 'baixa',
-      texto_bruto: String(error?.message || error),
+      texto_bruto: msg,
     };
   }
 };
@@ -121,7 +123,11 @@ export const criarUrlPreview = (arquivo: File): string => {
 export const comprimirImagem = (arquivo: File, qualidade: number = 0.85): Promise<File> => {
   return new Promise((resolve) => {
     const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d')!;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      resolve(arquivo);
+      return;
+    }
     const img = new Image();
 
     img.onload = () => {
@@ -146,7 +152,7 @@ export const comprimirImagem = (arquivo: File, qualidade: number = 0.85): Promis
     };
 
     img.onerror = () => {
-      resolve(arquivo); // Retorna original se falhar ao carregar no canvas
+      resolve(arquivo);
     };
 
     img.src = URL.createObjectURL(arquivo);

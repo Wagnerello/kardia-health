@@ -25,12 +25,8 @@ describe('Matriz de Regras e Sad Paths — Hidratação (agua.test.ts)', () => {
       const mockLogAuditoria = vi.fn();
 
       const tentarSalvar = async () => {
-        try {
-          await mockSetDoc();
-          mockLogAuditoria('Registro salvo com sucesso');
-        } catch (err) {
-          throw err;
-        }
+        await mockSetDoc();
+        mockLogAuditoria('Registro salvo com sucesso');
       };
 
       await expect(tentarSalvar()).rejects.toThrow('Firebase network timeout');

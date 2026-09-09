@@ -1,7 +1,7 @@
+import { logger } from '../services/logger';
 import { db } from '../firebase';
 import { collection, query, where, doc, setDoc, getDocs } from 'firebase/firestore';
 import { genAI, ANALISE_MODELS, comFallback } from './ai-config';
-
 import { buscarAguaDoDia } from './agua';
 
 export interface AnaliseDiaria {
@@ -10,6 +10,25 @@ export interface AnaliseDiaria {
   data_str: string; // "DD/MM/YYYY" format
   feedback: string;
   atualizado_em: string;
+}
+
+export interface AnaliseRecordItem {
+  timestamp: string | number | Date;
+  tipo: 'pressao' | 'glicemia' | 'peso' | string;
+  sys?: number;
+  dia?: number;
+  pul?: number;
+  valor?: number;
+  momento?: string;
+  peso?: number;
+  original?: {
+    sys?: number;
+    dia?: number;
+    pul?: number;
+    valor?: number;
+    momento?: string;
+    peso?: number;
+  };
 }
 
 /**
@@ -21,7 +40,7 @@ export async function buscarAnalisesDiarias(userId: string): Promise<AnaliseDiar
     const snap = await getDocs(q);
     return snap.docs.map(d => ({ id: d.id, ...d.data() } as AnaliseDiaria));
   } catch (err) {
-    console.warn('[analise-diaria] Erro ao buscar análises diárias, pode ser falta de índice:', err);
+    logger.warn('[analise-diaria] Erro ao buscar análises diárias, pode ser falta de índice:', err);
     return [];
   }
 }
@@ -35,25 +54,7 @@ export async function salvarAnaliseDiaria(analise: AnaliseDiaria): Promise<void>
   await setDoc(docRef, analise);
 }
 
-/**
- * Gera um feedback unificado para o dia usando Gemini
- * @param records Lista combinada de registros do dia
- * @param dataStr Data no formato "DD/MM/YYYY"
- * @param userId ID do usuário
- */
-export async function gerarAnaliseDiariaIA(records: any[], dataStr: string, userId: string): Promise<string> {
-  // Buscar água consumida no respectivo dia
-  const dateParts = dataStr.split('/');
-  const dateStringYMD = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`; // YYYY-MM-DD
-  const waterLog = await buscarAguaDoDia(userId, dateStringYMD).catch(() => null);
-  const aguaMl = waterLog ? waterLog.amount_ml : 0;
-
-  const prompt = `
-Você é o KardIA, um assistente virtual de saúde. O usuário quer um resumo das suas aferições no dia ${dataStr}.
-Abaixo estão todas as medições (pressão, glicemia, peso, etc.) registradas neste dia:
-
-- Consumo de água: ${aguaMl} mL.
-${records.map(r => {
+function formatarLinhaRegistro(r: AnaliseRecordItem): string {
   const orig = r.original || {};
   let linha = `- ${new Date(r.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}: `;
   if (r.tipo === 'pressao') {
@@ -64,7 +65,29 @@ ${records.map(r => {
     linha += `Peso ${(orig.peso ?? r.peso)} kg.`;
   }
   return linha;
-}).join('\n')}
+}
+
+/**
+ * Gera um feedback unificado para o dia usando Gemini
+ * @param records Lista combinada de registros do dia
+ * @param dataStr Data no formato "DD/MM/YYYY"
+ * @param userId ID do usuário
+ */
+export async function gerarAnaliseDiariaIA(records: AnaliseRecordItem[], dataStr: string, userId: string): Promise<string> {
+  // Buscar água consumida no respectivo dia
+  const dateParts = dataStr.split('/');
+  const dateStringYMD = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`; // YYYY-MM-DD
+  const waterLog = await buscarAguaDoDia(userId, dateStringYMD).catch(() => null);
+  const aguaMl = waterLog ? waterLog.amount_ml : 0;
+
+  const linhas = records.map(formatarLinhaRegistro).join('\n');
+
+  const prompt = `
+Você é o KardIA, um assistente virtual de saúde. O usuário quer um resumo das suas aferições no dia ${dataStr}.
+Abaixo estão todas as medições (pressão, glicemia, peso, etc.) registradas neste dia:
+
+- Consumo de água: ${aguaMl} mL.
+${linhas}
 
 Por favor, faça um resumo clínico leve, direto e humanizado sobre este dia. 
 Comente se houve estabilidade, chame a atenção para algum pico (se houver) e dê uma orientação geral.
