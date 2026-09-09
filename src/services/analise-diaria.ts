@@ -96,7 +96,7 @@ Seja breve (máximo de 2 parágrafos curtos). Use **negritos** para destacar pon
 Atenção: Não utilize emojis ou símbolos semelhantes em hipótese alguma na sua resposta.
   `.trim();
 
-  const text = await comFallback(
+  const resultado = await comFallback<{ text: string; modelName?: string } | string>(
     ANALISE_MODELS,
     async (modelName) => {
       const model = genAI.getGenerativeModel({ model: modelName });
@@ -105,6 +105,10 @@ Atenção: Não utilize emojis ou símbolos semelhantes em hipótese alguma na s
     },
     prompt
   );
+
+  const text = typeof resultado === 'string'
+    ? resultado
+    : (resultado as { text?: string })?.text || String(resultado);
 
   const analise: AnaliseDiaria = {
     user_id: userId,

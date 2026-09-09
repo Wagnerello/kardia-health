@@ -1,37 +1,37 @@
 /* === VARIÁVEIS E RESET === */
 :root {
-  --primary: #4338ca;
-  --primary-dark: #312e81;
-  --primary-light: #6366f1;
-  --accent: #10b981;
-  --accent-dark: #059669;
+  --primary: #1d4ed8;
+  --primary-dark: #1e3a8a;
+  --primary-light: #2563eb;
+  --accent: #059669;
+  --accent-dark: #047857;
   --bg: #f8fafc;
   --bg-card: #ffffff;
   --bg-card2: #f1f5f9;
   --bg-input: #f8fafc;
   --border: #e2e8f0;
-  --text: #1e293b;
-  --text-muted: #64748b;
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --success: #10b981;
+  --text: #0f172a;
+  --text-muted: #475569;
+  --danger: #dc2626;
+  --warning: #b45309;
+  --success: #047857;
   --normal-color: var(--success);
   --elevated-color: var(--warning);
   --hyper1-color: var(--danger);
-  --hyper2-color: #dc2626;
-  --crisis-color: #991b1b;
-  --low-color: var(--primary-light);
+  --hyper2-color: #b91c1c;
+  --crisis-color: #7f1d1d;
+  --low-color: #0284c7;
   --radius: 12px;
-  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
-  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
-  --transition: all 0.2s ease-out;
+  --shadow: 0 4px 14px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+  --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   /* Cores do gráfico como tokens */
-  --chart-sys: #6366f1;
-  --chart-dia: #10b981;
-  --chart-pul: var(--warning);
+  --chart-sys: #2563eb;
+  --chart-dia: #047857;
+  --chart-pul: #b45309;
   /* Google button */
   --google-btn-bg: #ffffff;
-  --google-btn-text: #1e293b;
+  --google-btn-text: #0f172a;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -54,10 +54,19 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.5;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
+
+/* Escala Tipográfica Padrão */
+h1 { font-size: 1.75rem; font-weight: 700; line-height: 1.25; color: var(--text); letter-spacing: -0.02em; }
+h2 { font-size: 1.35rem; font-weight: 700; line-height: 1.3; color: var(--text); letter-spacing: -0.01em; }
+h3 { font-size: 1.15rem; font-weight: 600; line-height: 1.35; color: var(--text); }
+h4 { font-size: 1.0rem; font-weight: 600; line-height: 1.4; color: var(--text); }
+p { font-size: 0.95rem; line-height: 1.5; }
 
 /* === SCROLLBAR === */
 ::-webkit-scrollbar { width: 6px; }
@@ -377,7 +386,7 @@ body {
   width: 0%;
   background: linear-gradient(90deg, var(--primary), var(--accent));
   border-radius: 3px;
-  transition: width 0.2s ease-out;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
 }
 .terms-scroll-label {
   font-size: 12px;
@@ -615,14 +624,24 @@ body {
 .btn-primary:active { transform: translateY(0); }
 .btn-ghost { 
   background: var(--bg-card2); 
-  color: var(--primary-light); 
-  border: 1px solid var(--primary-light); 
+  color: var(--text); 
+  border: 1px solid var(--border); 
 }
 .btn-ghost:hover { 
-  border-color: var(--primary); 
-  color: white; 
-  background: var(--primary); 
+  border-color: var(--border); 
+  color: var(--text); 
+  background: var(--bg-input); 
   box-shadow: var(--shadow-sm);
+}
+.btn-ghost-danger {
+  color: var(--danger) !important;
+  background: transparent !important;
+  border-color: transparent !important;
+}
+.btn-ghost-danger:hover {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+  border-color: #fecaca !important;
 }
 .btn-danger { background: var(--danger); color: white; }
 .btn-success { background: var(--success); color: white; }
@@ -779,7 +798,7 @@ body {
 .nav-item {
   flex: 1; display: flex; flex-direction: column; align-items: center;
   gap: 3px; padding: 6px 4px; cursor: pointer;
-  color: var(--text-muted); font-size: 10px; font-weight: 600;
+  color: var(--text-muted); font-size: 11px; font-weight: 600;
   transition: var(--transition); border: none; background: none;
   letter-spacing: 0.3px;
 }
@@ -958,7 +977,7 @@ body {
   font-family: inherit; transition: var(--transition);
 }
 .value-input-field:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); }
-.value-input-unit { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+.value-input-unit { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
 
 /* === PERFIL === */
 .profile-header {
@@ -1099,7 +1118,7 @@ body {
 
 /* Label de grupo na sidebar */
 .sidebar-group-label {
-  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
   letter-spacing: 1.2px; color: var(--text-muted); opacity: 0.7;
   padding: 16px 16px 6px; margin-top: 4px;
 }
@@ -1351,9 +1370,6 @@ select.input-field {
   background: rgba(15, 23, 42, 0.4);
   backdrop-filter: blur(4px);
 }
-.modal {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
 
 
 @media (min-width: 769px) { #pwa-install-banner { display: none !important; } }
@@ -1362,21 +1378,21 @@ select.input-field {
    BOTÃO EXPORTAR PDF  (UI/UX Pro Max)
 ════════════════════════════════════════════════ */
 .btn-pdf-export {
-  background: linear-gradient(135deg, #e63946 0%, #c1121f 100%);
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
   color: #fff;
   border: none;
-  box-shadow: 0 2px 8px rgba(230, 57, 70, 0.35);
-  transition: all 0.2s ease-out;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
 }
 .btn-pdf-export:hover {
-  background: linear-gradient(135deg, #c1121f 0%, #9d0208 100%);
-  box-shadow: 0 4px 14px rgba(230, 57, 70, 0.45);
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.16);
   transform: translateY(-1px);
 }
 .btn-pdf-export:active {
   transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(230, 57, 70, 0.3);
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
 }
 .btn-pdf-export:disabled {
   opacity: 0.6;
@@ -1412,7 +1428,7 @@ select.input-field {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px solid #6366f1;
+  border-bottom: 2px solid var(--primary);
   padding-bottom: 20px;
   margin-bottom: 28px;
 }
@@ -1424,7 +1440,7 @@ select.input-field {
 .pdf-report-brand-logo {
   width: 38px;
   height: 38px;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -1476,7 +1492,7 @@ select.input-field {
   gap: 2px;
 }
 .pdf-patient-label {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   color: #94a3b8;
   text-transform: uppercase;
@@ -1536,7 +1552,7 @@ select.input-field {
   display: inline-block;
   padding: 2px 9px;
   border-radius: 20px;
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 600;
 }
 .pdf-badge-normal    { background: #dcfce7; color: #166534; }
@@ -1547,7 +1563,7 @@ select.input-field {
 /* Bloco de texto do laudo IA */
 .pdf-laudo-text {
   background: #f8fafc;
-  border-left: 4px solid #6366f1;
+  border-left: 4px solid var(--primary);
   border-radius: 0 10px 10px 0;
   padding: 18px 22px;
   font-size: 13px;
@@ -1565,7 +1581,7 @@ select.input-field {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 10.5px;
+  font-size: 11px;
   color: #94a3b8;
 }
 .pdf-report-footer strong {
@@ -1599,18 +1615,18 @@ select.input-field {
 .pdf-stat-value {
   font-size: 22px;
   font-weight: 800;
-  color: #6366f1;
+  color: var(--primary);
   letter-spacing: -0.5px;
   line-height: 1;
 }
 .pdf-stat-unit {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
   color: #94a3b8;
   margin-left: 2px;
 }
 .pdf-stat-label {
-  font-size: 10.5px;
+  font-size: 11px;
   color: #64748b;
   margin-top: 4px;
   font-weight: 500;
@@ -1639,7 +1655,7 @@ select.input-field {
   gap: 8px;
 }
 .admin-badge {
-  background: linear-gradient(135deg, #4338ca, #6366f1);
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
   color: white;
   padding: 4px 10px;
   border-radius: 20px;
@@ -2079,6 +2095,7 @@ select.input-field {
   color: var(--text-muted);
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   word-break: break-word;

@@ -19,7 +19,7 @@ function gerarSelectPlano(u: UserProfile, safeUid: string, safeEmail: string, di
   return `
     <div class="admin-detail-row">
       <span style="color:var(--text-muted);">Plano:</span>
-      <select onchange="alterarPlanoUsuarioAdmin('${safeUid}', this.value, '${safeEmail}')" class="admin-filter-select" style="padding:2px 6px; font-size:11px;" ${disabled}>
+      <select onchange="alterarPlanoUsuarioAdmin('${safeUid}', this.value, '${safeEmail}')" class="admin-filter-select" style="padding:2px 6px; font-size:12px;" ${disabled}>
         <option value="Gratuito" ${u.plano === 'Gratuito' ? 'selected' : ''}>Gratuito</option>
         <option value="Premium" ${u.plano === 'Premium' ? 'selected' : ''}>Premium</option>
         <option value="Ouro" ${u.plano === 'Ouro' ? 'selected' : ''}>Ouro</option>
@@ -32,7 +32,7 @@ function gerarSelectStatus(u: UserProfile, safeUid: string, safeEmail: string, d
   return `
     <div class="admin-detail-row">
       <span style="color:var(--text-muted);">Status:</span>
-      <select onchange="alterarStatusUsuarioAdmin('${safeUid}', this.value, '${safeEmail}')" class="admin-filter-select" style="padding:2px 6px; font-size:11px;" ${disabled}>
+      <select onchange="alterarStatusUsuarioAdmin('${safeUid}', this.value, '${safeEmail}')" class="admin-filter-select" style="padding:2px 6px; font-size:12px;" ${disabled}>
         <option value="Ativo" ${u.status === 'Ativo' ? 'selected' : ''}>Ativo</option>
         <option value="Pendente" ${u.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
         <option value="Suspenso" ${u.status === 'Suspenso' ? 'selected' : ''}>Suspenso</option>
@@ -47,7 +47,7 @@ function gerarSelectRole(u: UserProfile, safeUid: string, safeEmail: string, dis
   return `
     <div class="admin-detail-row">
       <span style="color:var(--text-muted);">Função:</span>
-      <select onchange="alterarRoleUsuarioAdmin('${safeUid}', this.value, '${safeEmail}')" class="admin-filter-select" style="padding:2px 6px; font-size:11px;" ${disabled}>
+      <select onchange="alterarRoleUsuarioAdmin('${safeUid}', this.value, '${safeEmail}')" class="admin-filter-select" style="padding:2px 6px; font-size:12px;" ${disabled}>
         <option value="USER" ${u.role !== 'ADMIN' ? 'selected' : ''}>USER (${roleText})</option>
         <option value="ADMIN" ${u.role === 'ADMIN' ? 'selected' : ''}>ADMIN</option>
       </select>

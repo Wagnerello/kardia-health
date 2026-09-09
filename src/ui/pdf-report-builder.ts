@@ -136,7 +136,7 @@ export function gerarHtmlGridStatsPDF(stats: EstatisticasPDF): string {
 
 function renderizarLinhaPressao(dt: string, a: BpReading): string {
   const clf = classificarPressao(a.sys, a.dia);
-  const resultado = `<span style="font-weight:700;color:#6366f1;">${a.sys} / ${a.dia} <span style="font-size:11px;color:#94a3b8;">mmHg</span></span>`;
+  const resultado = `<span style="font-weight:700;color:#1d4ed8;">${a.sys} / ${a.dia} <span style="font-size:12px;color:#475569;">mmHg</span></span>`;
   const classificacao = obterBadgePDF(clf.label);
   const contexto = `Pulso: ${a.pul} bpm`;
   return `
@@ -145,13 +145,13 @@ function renderizarLinhaPressao(dt: string, a: BpReading): string {
       <td style="font-weight:600;color:#475569;">Pressão</td>
       <td>${resultado}</td>
       <td>${classificacao}</td>
-      <td style="color:#64748b;font-size:11px;line-height:1.4;">${contexto}</td>
+      <td style="color:#475569;font-size:12px;line-height:1.4;">${contexto}</td>
     </tr>`;
 }
 
 function renderizarLinhaGlicemia(dt: string, g: GlicemiaReading): string {
   const clf = classificarGlicemia(g.valor, g.momento);
-  const resultado = `<span style="font-weight:700;color:#f59e0b;">${g.valor} <span style="font-size:11px;color:#94a3b8;">mg/dL</span></span>`;
+  const resultado = `<span style="font-weight:700;color:#b45309;">${g.valor} <span style="font-size:12px;color:#475569;">mg/dL</span></span>`;
   const classificacao = obterBadgePDF(clf.label);
   const contexto = `Momento: ${g.momento.charAt(0).toUpperCase() + g.momento.slice(1)}`;
   return `
@@ -160,19 +160,19 @@ function renderizarLinhaGlicemia(dt: string, g: GlicemiaReading): string {
       <td style="font-weight:600;color:#475569;">Glicemia</td>
       <td>${resultado}</td>
       <td>${classificacao}</td>
-      <td style="color:#64748b;font-size:11px;line-height:1.4;">${contexto}</td>
+      <td style="color:#475569;font-size:12px;line-height:1.4;">${contexto}</td>
     </tr>`;
 }
 
 function renderizarLinhaPeso(dt: string, p: PesoLog): string {
-  const resultado = `<span style="font-weight:700;color:#10b981;">${p.peso} <span style="font-size:11px;color:#94a3b8;">kg</span></span>`;
+  const resultado = `<span style="font-weight:700;color:#047857;">${p.peso} <span style="font-size:12px;color:#475569;">kg</span></span>`;
   return `
     <tr>
       <td>${dt}</td>
       <td style="font-weight:600;color:#475569;">Peso</td>
       <td>${resultado}</td>
       <td>--</td>
-      <td style="color:#64748b;font-size:11px;line-height:1.4;">Registro de Peso</td>
+      <td style="color:#475569;font-size:12px;line-height:1.4;">Registro de Peso</td>
     </tr>`;
 }
 
@@ -210,8 +210,8 @@ export async function gerarLinhasTabelaUnificadaPDF(
       const parsed = await marked.parse(String(analisesMap.get(dtStr) || ''));
       linhaResumoIA = `
         <tr style="background-color: #f8fafc;">
-          <td colspan="5" style="padding: 8px 12px; font-size: 11px; color: #475569; line-height: 1.4; border-bottom: 2px solid #e2e8f0;">
-            <div style="font-weight: 700; color: #3b82f6; margin-bottom: 4px;">🩺 Resumo da IA (${dtStr}):</div>
+          <td colspan="5" style="padding: 8px 12px; font-size: 12px; color: #475569; line-height: 1.4; border-bottom: 2px solid #e2e8f0;">
+            <div style="font-weight: 700; color: #1d4ed8; margin-bottom: 4px;">🩺 Resumo da IA (${dtStr}):</div>
             ${DOMPurify.sanitize(parsed as string)}
           </td>
         </tr>`;

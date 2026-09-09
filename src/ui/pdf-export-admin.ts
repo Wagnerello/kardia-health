@@ -66,18 +66,18 @@ function gerarSecaoDistribuicaoPressao(afericoes: BpReading[]): string {
   return `
     <div style="display:flex;gap:16px;margin-bottom:24px;">
       <div style="flex:1;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px 20px;text-align:center;">
-        <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Classificação Média OMS (Pressão)</div>
-        <div style="font-size:28px;font-weight:800;color:#6366f1;letter-spacing:-1px;">${mediaSys} / ${mediaDia}</div>
+        <div style="font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Classificação Média OMS (Pressão)</div>
+        <div style="font-size:28px;font-weight:800;color:#1d4ed8;letter-spacing:-1px;">${mediaSys} / ${mediaDia}</div>
         <div style="margin-top:8px;">${obterBadgePDF(clfMedia.label)}</div>
-        <div style="margin-top:8px;font-size:11.5px;color:#64748b;">Índice de normalidade: <strong style="color:#16a34a;">${Math.round((normalCount / countPressao) * 100)}%</strong></div>
+        <div style="margin-top:8px;font-size:12px;color:#475569;">Índice de normalidade: <strong style="color:#047857;">${Math.round((normalCount / countPressao) * 100)}%</strong></div>
       </div>
       <div style="flex:1;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px 20px;">
-        <div style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Distribuição por Categoria (Pressão)</div>
+        <div style="font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Distribuição por Categoria (Pressão)</div>
         <table style="width:100%;font-size:12px;border-collapse:collapse;">
           <thead><tr>
-            <th style="text-align:left;font-size:10px;color:#94a3b8;padding-bottom:6px;">Categoria</th>
-            <th style="text-align:center;font-size:10px;color:#94a3b8;padding-bottom:6px;">Qtd</th>
-            <th style="text-align:center;font-size:10px;color:#94a3b8;padding-bottom:6px;">%</th>
+            <th style="text-align:left;font-size:12px;color:#475569;padding-bottom:6px;">Categoria</th>
+            <th style="text-align:center;font-size:12px;color:#475569;padding-bottom:6px;">Qtd</th>
+            <th style="text-align:center;font-size:12px;color:#475569;padding-bottom:6px;">%</th>
           </tr></thead>
           <tbody>${distRows}</tbody>
         </table>
