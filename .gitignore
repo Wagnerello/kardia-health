@@ -39,4 +39,4 @@ ui-debug.log
 *.njsproj
 *.sln
 *.sw?
-teste.md
+graphify-out/

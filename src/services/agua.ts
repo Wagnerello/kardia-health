@@ -70,8 +70,9 @@ export async function buscarHistoricoAgua(uid: string, limitDays: number = 7, of
     const day = String(d.getDate()).padStart(2, '0');
     const dateStr = `${year}-${month}-${day}`;
 
-    if (logsMap.has(dateStr)) {
-      result.push(logsMap.get(dateStr)!);
+    const existingLog = logsMap.get(dateStr);
+    if (existingLog) {
+      result.push(existingLog);
     } else {
       result.push({
         id: `${uid}_${dateStr}`,

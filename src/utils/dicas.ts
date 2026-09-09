@@ -31,7 +31,7 @@ export function obterDicaPressao(ctx: ContextoSaude): Dica {
     }
   }
 
-  if (ctx.userProfile && (ctx.userProfile as any).usaMedicacao) {
+  if (ctx.userProfile?.usaMedicacao) {
     return {
       titulo: 'Lembrete Médico:',
       texto: 'A eficácia do controle pressórico depende muito da regularidade. Tente tomar sua medicação sempre no mesmo horário todos os dias.',
@@ -76,62 +76,63 @@ export function obterDicaGlicemia(ctx: ContextoSaude): Dica {
   return { titulo: 'Dica de Saúde:', texto: dica, icone: icon };
 }
 
+function analisarTendenciaSemanalAgua(hist: DailyWaterLog[], metaAgua: number, progressoHoje: number, icon: string): Dica | null {
+  if (hist.length === 0) return null;
+
+  const total7d = hist.reduce((sum, h) => sum + (h.amount_ml || 0), 0);
+  const media7d = Math.round(total7d / hist.length);
+  const diasMetaAtingida = hist.filter(h => h.amount_ml >= h.meta_ml && h.meta_ml > 0).length;
+  const diasSemRegistro = hist.filter(h => (h.amount_ml || 0) === 0).length;
+
+  if (diasSemRegistro >= 4 || media7d < metaAgua * 0.4) {
+    return {
+      titulo: 'Alerta de Hidratação Semanal:',
+      texto: `Sua média dos últimos 7 dias é de apenas ${media7d} mL/dia. A baixa ingestão de água prejudica os rins e afeta o controle da pressão arterial.`,
+      icone: icon
+    };
+  }
+
+  if (diasMetaAtingida <= 2 && progressoHoje < 0.5) {
+    return {
+      titulo: 'Consistência de Hidratação:',
+      texto: `Você atingiu a meta em apenas ${diasMetaAtingida} de 7 dias nesta semana. Tente manter uma garrafa por perto para criar regularidade diária.`,
+      icone: icon
+    };
+  }
+
+  if (diasMetaAtingida >= 5) {
+    return {
+      titulo: 'Excelente Tendência Semanal!',
+      texto: `Parabéns! Você atingiu a meta de água em ${diasMetaAtingida} dos últimos 7 dias (média de ${(media7d / 1000).toFixed(1)} L/dia). Excelente para sua circulação!`,
+      icone: icon
+    };
+  }
+  return null;
+}
+
 // ── Dicas de Hidratação ────────────────────────────────────────
 export function obterDicaHidratacao(ctx: ContextoSaude): Dica {
   const icon = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>';
-  
   const progressoHoje = ctx.aguaHoje / ctx.metaAgua;
-  const hist = ctx.historicoAgua7d || [];
 
-  // Análise dos últimos 7 dias (se houver histórico)
-  if (hist.length > 0) {
-    const total7d = hist.reduce((sum, h) => sum + (h.amount_ml || 0), 0);
-    const media7d = Math.round(total7d / hist.length);
-    const diasMetaAtingida = hist.filter(h => h.amount_ml >= h.meta_ml && h.meta_ml > 0).length;
-    const diasSemRegistro = hist.filter(h => (h.amount_ml || 0) === 0).length;
+  const dicaSemanal = analisarTendenciaSemanalAgua(ctx.historicoAgua7d || [], ctx.metaAgua, progressoHoje, icon);
+  if (dicaSemanal) return dicaSemanal;
 
-    // Alerta de baixíssima hidratação na semana (mais da metade dos dias sem registro ou consumo crítico)
-    if (diasSemRegistro >= 4 || media7d < ctx.metaAgua * 0.4) {
-      return {
-        titulo: 'Alerta de Hidratação Semanal:',
-        texto: `Sua média dos últimos 7 dias é de apenas ${media7d} mL/dia. A baixa ingestão de água prejudica os rins e afeta o controle da pressão arterial.`,
-        icone: icon
-      };
-    }
-
-    // Alerta de inconsistência (se a meta foi atingida em poucos dias)
-    if (diasMetaAtingida <= 2 && progressoHoje < 0.5) {
-      return {
-        titulo: 'Consistência de Hidratação:',
-        texto: `Você atingiu a meta em apenas ${diasMetaAtingida} de 7 dias nesta semana. Tente manter uma garrafa por perto para criar regularidade diária.`,
-        icone: icon
-      };
-    }
-
-    // Elogio de excelente desempenho semanal
-    if (diasMetaAtingida >= 5) {
-      return {
-        titulo: 'Excelente Tendência Semanal!',
-        texto: `Parabéns! Você atingiu a meta de água em ${diasMetaAtingida} dos últimos 7 dias (média de ${(media7d / 1000).toFixed(1)} L/dia). Excelente para sua circulação!`,
-        icone: icon
-      };
-    }
-  }
-
-  // Fallbacks baseados na ingestão do dia atual
   if (progressoHoje === 0) {
     return {
       titulo: 'Hora de começar:',
       texto: 'Você ainda não registrou consumo de água hoje. Beba um copo agora mesmo! Seu corpo agradece.',
       icone: icon
     };
-  } else if (progressoHoje < 0.5) {
+  }
+  if (progressoHoje < 0.5) {
     return {
       titulo: 'Atenção (Hidratação):',
       texto: 'Você ainda não atingiu nem metade da sua meta diária de água. Mantenha a garrafinha por perto.',
       icone: icon
     };
-  } else if (progressoHoje >= 1) {
+  }
+  if (progressoHoje >= 1) {
     return {
       titulo: 'Parabéns!',
       texto: 'Você atingiu sua meta diária! Manter essa hidratação constante é vital para o funcionamento saudável do corpo.',

@@ -1,38 +1,36 @@
 import { Timestamp } from 'firebase/firestore';
 
+function parseTimestampDuck(val: object): Date | null {
+  if ('toDate' in val && typeof (val as { toDate: () => unknown }).toDate === 'function') {
+    try {
+      const d = (val as { toDate: () => unknown }).toDate();
+      if (d instanceof Date && !isNaN(d.getTime())) return d;
+    } catch {
+      return null;
+    }
+  }
+  if ('seconds' in val && typeof (val as { seconds: unknown }).seconds === 'number') {
+    const d = new Date((val as { seconds: number }).seconds * 1000);
+    if (!isNaN(d.getTime())) return d;
+  }
+  return null;
+}
+
 /**
  * Converte qualquer formato de data (Firestore Timestamp, Date, ISO string,
  * epoch timestamp em ms/s, ou objeto {seconds, nanoseconds}) em um objeto Date válido.
  */
-export function parseFirestoreDate(val: any): Date {
+export function parseFirestoreDate(val: unknown): Date {
   if (!val) return new Date();
-
-  // 1. Instância do Timestamp do Firestore (ou duck typing)
-  if (val instanceof Timestamp || (typeof val === 'object' && typeof val.toDate === 'function')) {
-    try {
-      const d = val.toDate();
-      if (d && !isNaN(d.getTime())) return d;
-    } catch {
-      // fallback
-    }
+  if (val instanceof Timestamp) return val.toDate();
+  if (val instanceof Date) return isNaN(val.getTime()) ? new Date() : val;
+  if (typeof val === 'object') {
+    const parsed = parseTimestampDuck(val as object);
+    if (parsed) return parsed;
   }
-
-  // 2. Instância de Date
-  if (val instanceof Date) {
-    return isNaN(val.getTime()) ? new Date() : val;
-  }
-
-  // 3. Objeto com formato Timestamp { seconds, nanoseconds }
-  if (typeof val === 'object' && typeof val.seconds === 'number') {
-    const d = new Date(val.seconds * 1000);
-    if (!isNaN(d.getTime())) return d;
-  }
-
-  // 4. String ou Número (epoch)
   if (typeof val === 'string' || typeof val === 'number') {
     const d = new Date(val);
     if (!isNaN(d.getTime())) return d;
   }
-
   return new Date();
 }
