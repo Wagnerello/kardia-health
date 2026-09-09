@@ -107,15 +107,15 @@ function renderizarCardLaudoIndividual(l: SavedLaudo, isAdminUser: boolean): str
     <div style="flex: 1; min-width: 0;">
       <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
         <span style="font-size: 12px; font-weight: 700; color: var(--text);">${dt}</span>
-        <span style="font-size: 11px; color: var(--text-muted);">· ${l.dias_analisados ? `${l.dias_analisados} dias` : 'Período completo'}</span>
+        <span style="font-size: 12px; color: var(--text-muted);">· ${l.dias_analisados ? `${l.dias_analisados} dias` : 'Período completo'}</span>
         ${inativoBadge}
       </div>
       <p style="font-size: 12px; color: var(--text-muted); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${preview}</p>
     </div>
     <div style="display: flex; gap: 6px; flex-shrink: 0;">
-      <button class="btn btn-ghost btn-small" onclick="abrirModalVisualizarLaudo('${lId}')" style="padding: 4px 8px; font-size: 11px;" title="Visualizar laudo completo">👁️ Ver</button>
-      <button class="btn btn-ghost btn-small" onclick="exportarLaudoPorIdParaPDF('${lId}')" style="padding: 4px 8px; font-size: 11px;" title="Exportar laudo em PDF">📄 PDF</button>
-      ${(isAdminUser && !inativo) ? `<button class="btn btn-ghost btn-small" onclick="inativarLaudoUI('${lId}', carregarLaudos)" style="padding: 4px 8px; font-size: 11px; color: var(--danger);" title="Inativar este laudo">🗑️</button>` : ''}
+      <button class="btn btn-ghost btn-small" onclick="abrirModalVisualizarLaudo('${lId}')" style="padding: 4px 8px; font-size: 12px;" title="Visualizar laudo completo">👁️ Ver</button>
+      <button class="btn btn-ghost btn-small" onclick="exportarLaudoPorIdParaPDF('${lId}')" style="padding: 4px 8px; font-size: 12px;" title="Exportar laudo em PDF">📄 PDF</button>
+      ${(isAdminUser && !inativo) ? `<button class="btn btn-ghost btn-small" onclick="inativarLaudoUI('${lId}', carregarLaudos)" style="padding: 4px 8px; font-size: 12px; color: var(--danger);" title="Inativar este laudo">🗑️</button>` : ''}
     </div>
   </div>`;
 }
@@ -138,10 +138,10 @@ function gerarHtmlMesesLaudos(mesesMap: Record<string, GroupLaudoMes>, isAdminUs
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
           </svg>
           <span style="font-size: 14px; font-weight: 700; color: var(--text);">${mesGroup.label}</span>
-          <span class="badge" style="background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">${mesGroup.laudos.length} ${mesGroup.laudos.length === 1 ? 'laudo' : 'laudos'}</span>
+          <span class="badge" style="background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 700;">${mesGroup.laudos.length} ${mesGroup.laudos.length === 1 ? 'laudo' : 'laudos'}</span>
         </div>
         <div style="display: flex; align-items: center; gap: 8px;">
-          ${mIdx === 0 ? '<span style="font-size:11px; color:var(--accent); font-weight:600; background:var(--accent)15; padding:2px 8px; border-radius:10px;">Mês Atual</span>' : ''}
+          ${mIdx === 0 ? '<span style="font-size:12px; color:var(--accent); font-weight:600; background:var(--accent)15; padding:2px 8px; border-radius:10px;">Mês Atual</span>' : ''}
           <svg id="icon-${groupId}" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.3s ease; transform: ${isAberto ? 'rotate(180deg)' : 'rotate(0deg)'}; color: var(--text-muted);">
             <polyline points="6 9 12 15 18 9" />
           </svg>

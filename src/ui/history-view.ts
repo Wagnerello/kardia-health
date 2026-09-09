@@ -235,10 +235,10 @@ async function gerarHtmlMesesHistorico(mesesMap: Record<string, GroupMes>, anali
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
           </svg>
           <span style="font-size: 15px; font-weight: 700; color: var(--text);">${mesGroup.label}</span>
-          <span class="badge" style="background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">${mesGroup.totalItens} ${mesGroup.totalItens === 1 ? 'registro' : 'registros'}</span>
+          <span class="badge" style="background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 700;">${mesGroup.totalItens} ${mesGroup.totalItens === 1 ? 'registro' : 'registros'}</span>
         </div>
         <div style="display: flex; align-items: center; gap: 8px;">
-          ${mIdx === 0 ? '<span style="font-size:11px; color:var(--accent); font-weight:600; background:var(--accent)15; padding:2px 8px; border-radius:10px;">Mês Atual</span>' : ''}
+          ${mIdx === 0 ? '<span style="font-size:12px; color:var(--accent); font-weight:600; background:var(--accent)15; padding:2px 8px; border-radius:10px;">Mês Atual</span>' : ''}
           <svg id="icon-${groupId}" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.3s ease; transform: ${isAberto ? 'rotate(180deg)' : 'rotate(0deg)'}; color: var(--text-muted);">
             <polyline points="6 9 12 15 18 9" />
           </svg>

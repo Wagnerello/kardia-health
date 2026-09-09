@@ -3,7 +3,7 @@ import { comFallback } from './ai-config';
 
 describe('Matriz de Sad Paths & Resiliência — Motor de IA (ai-config.ts)', () => {
   it('deve realizar fallback para o segundo modelo se o primário falhar com erro 503/429', async () => {
-    const modelos = ['gemini-2.0-flash', 'gemini-1.5-flash'];
+    const modelos = ['gemini-2.5-flash', 'gemini-flash-latest'];
     
     const executor = vi.fn()
       .mockRejectedValueOnce(new Error('503 Service Unavailable / Cota excedida'))
@@ -16,7 +16,7 @@ describe('Matriz de Sad Paths & Resiliência — Motor de IA (ai-config.ts)', ()
   });
 
   it('deve interromper cascata e lançar erro claro se a chave de API for inválida (401/403)', async () => {
-    const modelos = ['gemini-2.0-flash', 'gemini-1.5-flash'];
+    const modelos = ['gemini-2.5-flash', 'gemini-flash-latest'];
     
     const apiError = Object.assign(new Error('API key not valid. Please pass a valid API key.'), { status: 401 });
 
@@ -30,7 +30,7 @@ describe('Matriz de Sad Paths & Resiliência — Motor de IA (ai-config.ts)', ()
   });
 
   it('deve lançar exceção segura quando todos os modelos da cascata falharem', async () => {
-    const modelos = ['gemini-2.0-flash', 'gemini-1.5-flash'];
+    const modelos = ['gemini-2.5-flash', 'gemini-flash-latest'];
     
     const executor = vi.fn()
       .mockRejectedValue(new Error('Network error / Offline'));

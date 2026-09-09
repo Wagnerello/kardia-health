@@ -224,13 +224,13 @@ export async function abrirHistoricoUsuarioAdmin(uid: string, nome: string): Pro
                     <span class="admin-reading-ai-text">${a.ai_feedback.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>
                   </div>
                   <div class="admin-reading-ai-actions">
-                    <button class="btn btn-ghost btn-small" onclick="event.stopPropagation(); reprocessarIADaAfericao('${a.id}')" title="Reprocessar IA desta aferição" style="padding: 4px 10px; font-size: 11px; display:flex; align-items:center; gap:4px; border-radius:6px;">🔄 Reprocessar</button>
-                    <button class="btn btn-primary btn-small" onclick="event.stopPropagation(); abrirModalDetalheAnalise('${a.id}')" style="padding: 4px 10px; font-size: 11px; display:flex; align-items:center; gap:4px; border-radius:6px;">🔍 Ver Completo</button>
+                    <button class="btn btn-ghost btn-small" onclick="event.stopPropagation(); reprocessarIADaAfericao('${a.id}')" title="Reprocessar IA desta aferição" style="padding: 4px 10px; font-size: 12px; display:flex; align-items:center; gap:4px; border-radius:6px;">🔄 Reprocessar</button>
+                    <button class="btn btn-primary btn-small" onclick="event.stopPropagation(); abrirModalDetalheAnalise('${a.id}')" style="padding: 4px 10px; font-size: 12px; display:flex; align-items:center; gap:4px; border-radius:6px;">🔍 Ver Completo</button>
                   </div>
                 </div>
               ` : `
                 <div style="display:flex; justify-content:flex-end;">
-                  <button class="btn btn-ghost btn-small" onclick="event.stopPropagation(); reprocessarIADaAfericao('${a.id}')" style="padding: 4px 10px; font-size: 11px; display:flex; align-items:center; gap:4px; border-radius:6px;">⚡ Gerar IA</button>
+                  <button class="btn btn-ghost btn-small" onclick="event.stopPropagation(); reprocessarIADaAfericao('${a.id}')" style="padding: 4px 10px; font-size: 12px; display:flex; align-items:center; gap:4px; border-radius:6px;">⚡ Gerar IA</button>
                 </div>
               `}
             </div>

@@ -57,8 +57,8 @@ function renderizarHistoricoListaPeso(pesos: PesoLog[], perfil: UserProfile) {
           <span style="color:var(--text-muted); margin-left:8px;">IMC: ${imcCalc}</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-size:11px; background:${clf.cor}22; color:${clf.cor}; padding:2px 6px; border-radius:4px;">${clf.label}</span>
-          <span style="color:var(--text-muted); font-size:11px;">${dataStr}</span>
+          <span style="font-size:12px; background:${clf.cor}22; color:${clf.cor}; padding:2px 6px; border-radius:4px;">${clf.label}</span>
+          <span style="color:var(--text-muted); font-size:12px;">${dataStr}</span>
           <button onclick="excluirRegistroPeso('${p.id}')" style="background:none;border:none;color:var(--error);cursor:pointer;padding:4px;" title="Excluir Registro">✕</button>
         </div>
       </div>
