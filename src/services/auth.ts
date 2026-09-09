@@ -15,7 +15,6 @@ import {
   setDoc,
   getDoc,
   serverTimestamp,
-  updateDoc,
 } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import type { UserProfile } from '../types';
@@ -134,11 +133,14 @@ export const TERMOS_VERSAO_ATUAL = '1.0';
 // Registrar aceite dos termos no Firestore
 export const aceitarTermos = async (uid: string): Promise<void> => {
   const userRef = doc(db, 'users', uid);
-  await updateDoc(userRef, {
+  const email = auth.currentUser?.email || '';
+  await setDoc(userRef, {
+    uid,
+    email,
     termos_aceitos: true,
     termos_aceitos_em: new Date().toISOString(),
     termos_versao: TERMOS_VERSAO_ATUAL,
-  });
+  }, { merge: true });
 };
 
 // Observer de estado de autenticação

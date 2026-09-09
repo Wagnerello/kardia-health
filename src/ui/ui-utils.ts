@@ -124,11 +124,11 @@ export function abrirModalConfirmacao(
   opts?: ModalConfirmacaoOpts
 ) {
   const textoBtn = opts?.textoBtn || 'Confirmar';
-  const corBtn = opts?.corBtn || '#ef4444';
+  const corBtn = opts?.corBtn || 'var(--danger)';
   const modal = document.getElementById('modal-confirmacao');
-  const titleEl = document.getElementById('modal-confirm-title');
-  const msgEl = document.getElementById('modal-confirm-msg');
-  const btnEl = document.getElementById('modal-confirm-btn');
+  const titleEl = document.getElementById('confirm-title') || document.getElementById('modal-confirm-title');
+  const msgEl = document.getElementById('confirm-message') || document.getElementById('modal-confirm-msg');
+  const btnEl = (document.getElementById('btn-confirm-action') || document.getElementById('modal-confirm-btn')) as HTMLButtonElement | null;
 
   if (titleEl) titleEl.textContent = titulo;
   if (msgEl) msgEl.textContent = mensagem;
@@ -137,10 +137,21 @@ export function abrirModalConfirmacao(
     btnEl.style.backgroundColor = corBtn;
     btnEl.onclick = () => {
       callbackConfirmar();
-      if (modal) modal.style.display = 'none';
+      fecharModalConfirmacao();
     };
   }
-  if (modal) modal.style.display = 'flex';
+  if (modal) {
+    modal.classList.remove('hidden');
+    modal.style.display = 'flex';
+  }
+}
+
+export function fecharModalConfirmacao(): void {
+  const modal = document.getElementById('modal-confirmacao');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
+  }
 }
 
 window.mostrarToast = mostrarToast;
@@ -148,7 +159,4 @@ window.escapeHtml = escapeHtml;
 window.mostrarTela = mostrarTela;
 window.toggleAvatarMenu = toggleAvatarMenu;
 window.abrirModalConfirmacao = abrirModalConfirmacao;
-window.fecharModalConfirmacao = () => {
-  const modal = document.getElementById('modal-confirmacao');
-  if (modal) modal.style.display = 'none';
-};
+window.fecharModalConfirmacao = fecharModalConfirmacao;

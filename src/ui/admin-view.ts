@@ -1,16 +1,12 @@
 import { logger } from '../services/logger';
 import { Chart } from 'chart.js';
-import DOMPurify from 'dompurify';
-import { marked } from 'marked';
 import { state } from './app-state';
 import { mostrarToast } from './ui-utils';
 import {
   obterTodosUsuarios,
   obterTotalAfericoes,
 } from '../services/admin';
-import { buscarPerfilUsuario } from '../services/auth';
-import { buscarAfericoes, gerarRelatorioCondutaOMS } from '../services/afericoes';
-import { formatarDataHora, classificarPressao } from '../types';
+import { gerarRelatorioCondutaOMS } from '../services/afericoes';
 import {
   renderizarTabelaUsuariosAdmin,
   filtrarTabelaUsuariosAdmin,
@@ -176,73 +172,40 @@ export function renderizarGraficoCrescimentoAdmin(): void {
   });
 }
 
+import { abrirJanelaHistoricoAdmin } from './admin-user-history-view';
+
 export async function abrirHistoricoUsuarioAdmin(uid: string, nome: string): Promise<void> {
-  const modal = document.getElementById('modal-historico-usuario');
-  const titleEl = document.getElementById('modal-hist-user-title');
-  const contentEl = document.getElementById('modal-hist-content');
-  if (!modal || !contentEl) return;
-
   state.adminTargetUserUid = uid;
-  state.adminTargetUserPerfil = null;
+  await abrirJanelaHistoricoAdmin(uid, nome);
+}
 
-  modal.classList.remove('hidden');
-  if (titleEl) titleEl.textContent = `Histórico de ${nome}`;
-  contentEl.innerHTML = `<div class="ocr-loading"><div class="ocr-spinner"></div><p style="color:var(--text-muted)">Carregando...</p></div>`;
-
+export function abrirLaudoSalvoAdminPorDados(laudoJson: string, nomePaciente: string, perfilJson: string): void {
   try {
-    const perfil = await buscarPerfilUsuario(uid);
-    state.adminTargetUserPerfil = perfil;
-
-    const afericoes = await buscarAfericoes(uid, 90);
-    if (afericoes.length === 0) {
-      contentEl.innerHTML = `<div class="empty-state"><div class="empty-title">Sem medições</div><p class="empty-sub">Este usuário ainda não registrou aferições.</p></div>`;
-      return;
-    }
-
-    contentEl.innerHTML = `
-      <div style="display:flex; flex-direction:column; gap:10px;">
-        ${afericoes.map(a => {
-          const clf = classificarPressao(a.sys, a.dia);
-          const dt = formatarDataHora(a.data_hora_afericao);
-          return `
-            <div class="admin-reading-card" style="border-left: 4px solid ${clf.cor};">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span class="admin-reading-date">${dt}</span>
-                <span class="admin-reading-badge" style="background:${clf.cor}22; color:${clf.cor}; border:1px solid ${clf.cor}44;">${clf.label}</span>
-              </div>
-              <div class="admin-reading-values">
-                <span style="font-size:24px; font-weight:800; color:var(--primary-light)">${a.sys}</span>
-                <span style="font-size:18px; color:var(--text-muted)">/</span>
-                <span style="font-size:24px; font-weight:800; color:var(--accent)">${a.dia}</span>
-                <span style="font-size:12px; color:var(--text-muted)">mmHg</span>
-                <span class="admin-reading-pulse">${a.pul} BPM</span>
-              </div>
-              ${a.ai_feedback ? `
-                <div class="admin-reading-ai-box">
-                  <div class="admin-reading-ai-content">
-                    <span style="display:flex;align-items:center;margin-top:2px;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></span>
-                    <span class="admin-reading-ai-text">${a.ai_feedback.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>
-                  </div>
-                  <div class="admin-reading-ai-actions">
-                    <button class="btn btn-ghost btn-small" onclick="event.stopPropagation(); reprocessarIADaAfericao('${a.id}')" title="Reprocessar IA desta aferição" style="padding: 4px 10px; font-size: 12px; display:flex; align-items:center; gap:4px; border-radius:6px;">🔄 Reprocessar</button>
-                    <button class="btn btn-primary btn-small" onclick="event.stopPropagation(); abrirModalDetalheAnalise('${a.id}')" style="padding: 4px 10px; font-size: 12px; display:flex; align-items:center; gap:4px; border-radius:6px;">🔍 Ver Completo</button>
-                  </div>
-                </div>
-              ` : `
-                <div style="display:flex; justify-content:flex-end;">
-                  <button class="btn btn-ghost btn-small" onclick="event.stopPropagation(); reprocessarIADaAfericao('${a.id}')" style="padding: 4px 10px; font-size: 12px; display:flex; align-items:center; gap:4px; border-radius:6px;">⚡ Gerar IA</button>
-                </div>
-              `}
-            </div>
-          `;
-        }).join('')}
-      </div>
-    `;
+    const laudo = JSON.parse(laudoJson);
+    const perfil = perfilJson ? JSON.parse(perfilJson) : null;
+    abrirLaudoEmNovaJanela({
+      titulo: 'Laudo Clínico Integrado',
+      conteudoMarkdown: laudo.conteudo,
+      nomePaciente,
+      dataGeracao: laudo.data_geracao,
+      diasAnalisados: laudo.dias_analisados,
+      periodoTexto: laudo.periodo_texto,
+      modeloUsado: laudo.modelo_usado,
+      detalhesClinicos: {
+        idade: perfil?.idade,
+        sexo: perfil?.sexo,
+        peso: perfil?.peso,
+        altura: perfil?.altura
+      }
+    });
   } catch (err) {
-    logger.error('Erro ao carregar histórico do usuário:', err);
-    contentEl.innerHTML = `<div class="empty-state"><div class="empty-icon" style="color:var(--danger)"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div><div class="empty-title">Erro ao carregar histórico</div></div>`;
+    logger.error('Erro ao abrir laudo salvo:', err);
+    mostrarToast('Erro ao abrir laudo salvo.', 'error');
   }
 }
+
+import { mostrarLoadingPassos, atualizarLoadingPasso, fecharLoadingPassos } from './loading-steps';
+import { abrirLaudoEmNovaJanela } from './laudo-window';
 
 export function fecharHistoricoUsuarioAdmin(): void {
   document.getElementById('modal-historico-usuario')?.classList.add('hidden');
@@ -254,34 +217,61 @@ export async function gerarLaudoDoUsuarioAdmin(): Promise<void> {
     return;
   }
   const btn = document.getElementById('btn-gerar-laudo-admin') as HTMLButtonElement;
-  if (!btn) return;
+  if (btn) {
+    btn.disabled = true;
+  }
 
-  btn.disabled = true;
-  btn.innerHTML = `<svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite; margin-right:6px;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Gerando...`;
+  const nomePaciente = state.adminTargetUserPerfil.nome || 'Paciente';
+
+  mostrarLoadingPassos(
+    `Gerando Laudo Clínico - ${nomePaciente}`,
+    'A inteligência médica está correlacionando o histórico de aferições, sinais vitais e perfil'
+  );
+
+  const dtInicioInput = (document.getElementById('admin-pdf-inicio') as HTMLInputElement)?.value;
+  const dtFimInput = (document.getElementById('admin-pdf-fim') as HTMLInputElement)?.value;
+
+  const filtroPeriodo = (dtInicioInput || dtFimInput)
+    ? { dataInicio: dtInicioInput, dataFim: dtFimInput }
+    : 90;
 
   try {
-    const markdownText = await gerarRelatorioCondutaOMS(state.adminTargetUserUid, state.adminTargetUserPerfil, 90);
-    const contentEl = document.getElementById('modal-hist-content');
-    if (contentEl) {
-      const parsed = await marked.parse(markdownText);
-      const parsedHtml = DOMPurify.sanitize(parsed as string);
-      contentEl.innerHTML = `
-        <div style="border-top: 1px solid var(--border); padding-top: 16px; margin-top: 8px;">
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom: 12px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary)"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-            <span style="font-size: 12px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Laudo IA Gerado</span>
-          </div>
-          <div class="laudo-content" style="font-size: 13px; line-height: 1.7; color: var(--text);">${parsedHtml}</div>
-        </div>
-      `;
-    }
-    mostrarToast('Laudo gerado com sucesso!', 'success');
-  } catch (err) {
+    const resLaudo = await gerarRelatorioCondutaOMS(
+      state.adminTargetUserUid,
+      state.adminTargetUserPerfil,
+      filtroPeriodo,
+      (etapa, total, msg) => {
+        atualizarLoadingPasso(etapa, total, msg);
+      }
+    );
+
+    fecharLoadingPassos();
+
+    abrirLaudoEmNovaJanela({
+      titulo: 'Laudo Clínico Integrado',
+      conteudoMarkdown: resLaudo.text,
+      nomePaciente,
+      diasAnalisados: resLaudo.diasAnalisados,
+      periodoTexto: resLaudo.periodoTexto,
+      modeloUsado: resLaudo.modelName,
+      detalhesClinicos: {
+        idade: state.adminTargetUserPerfil.idade,
+        sexo: state.adminTargetUserPerfil.sexo,
+        peso: state.adminTargetUserPerfil.peso,
+        altura: state.adminTargetUserPerfil.altura
+      }
+    });
+
+    mostrarToast('Laudo gerado e aberto em nova janela!', 'success');
+  } catch (err: unknown) {
+    fecharLoadingPassos();
     logger.error('Erro ao gerar laudo admin:', err);
-    mostrarToast('Erro ao gerar laudo. O usuário pode não ter histórico suficiente.', 'error');
+    const msgErro = err instanceof Error ? err.message : 'Erro ao gerar laudo. Verifique o histórico do usuário.';
+    mostrarToast(msgErro, 'error');
   } finally {
-    btn.disabled = false;
-    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg> Gerar Laudo IA`;
+    if (btn) {
+      btn.disabled = false;
+    }
   }
 }
 
@@ -291,3 +281,4 @@ window.mostrarSubAbaAdmin = mostrarSubAbaAdmin;
 window.abrirHistoricoUsuarioAdmin = abrirHistoricoUsuarioAdmin;
 window.fecharHistoricoUsuarioAdmin = fecharHistoricoUsuarioAdmin;
 window.gerarLaudoDoUsuarioAdmin = gerarLaudoDoUsuarioAdmin;
+window.abrirLaudoSalvoAdminPorDados = abrirLaudoSalvoAdminPorDados;

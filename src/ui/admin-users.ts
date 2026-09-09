@@ -1,5 +1,5 @@
 import { state } from './app-state';
-import { mostrarToast, escapeHtml } from './ui-utils';
+import { mostrarToast, escapeHtml, abrirModalConfirmacao } from './ui-utils';
 import { formatarDataHora } from '../types';
 import type { UserProfile } from '../types';
 import { logger } from '../services/logger';
@@ -175,19 +175,24 @@ export async function alterarRoleUsuarioAdmin(uid: string, novaRole: string, ema
   }
 }
 
-export async function excluirUsuarioAdmin(uid: string, nome: string, email: string): Promise<void> {
-  if (confirm(`⚠️ ATENÇÃO: Tem certeza que deseja excluir permanentemente a conta de "${nome}" (${email})?\n\nEsta ação excluirá todas as aferições e dados do Firestore!`)) {
-    try {
-      await excluirDadosUsuario(uid);
-      await registrarLogAdmin('EXCLUIR_USUARIO', `Conta e dados de ${nome} excluídos permanentemente`, uid, email);
-      mostrarToast(`Usuário ${nome} excluído com sucesso.`, 'success');
-      state.usuariosCadastrados = state.usuariosCadastrados.filter(u => u.uid !== uid);
-      filtrarTabelaUsuariosAdmin();
-    } catch (err) {
-      logger.error('Erro ao excluir usuário:', err);
-      mostrarToast('Erro ao excluir usuário.', 'error');
-    }
-  }
+export function excluirUsuarioAdmin(uid: string, nome: string, email: string): void {
+  abrirModalConfirmacao(
+    'Excluir Usuário Permanentemente',
+    `Tem certeza que deseja excluir permanentemente a conta de "${nome}" (${email})? Esta ação apagará todas as aferições e dados do Firestore de forma irreversível.`,
+    async () => {
+      try {
+        await excluirDadosUsuario(uid);
+        await registrarLogAdmin('EXCLUIR_USUARIO', `Conta e dados de ${nome} excluídos permanentemente`, uid, email);
+        mostrarToast(`Usuário ${nome} excluído com sucesso.`, 'success');
+        state.usuariosCadastrados = state.usuariosCadastrados.filter(u => u.uid !== uid);
+        filtrarTabelaUsuariosAdmin();
+      } catch (err) {
+        logger.error('Erro ao excluir usuário:', err);
+        mostrarToast('Erro ao excluir usuário.', 'error');
+      }
+    },
+    { textoBtn: 'Excluir Definitivamente', corBtn: 'var(--danger)' }
+  );
 }
 
 function gerarHtmlDetalhesUsuario(userObj: UserProfile): string {

@@ -149,10 +149,15 @@ export const gerarLaudoIntegradoIA = async (options: GerarLaudoIntegradoOptions)
   const prompt = montarPromptLaudoIntegradoTexto({ perfil, pressaoTexto, glicemiaTexto, medText, aguaTexto, pesoTexto, imcTexto });
 
   const res = await comFallback<{ text: string; modelName: string }>(ANALISE_MODELS, async (modelo: string) => {
-    const model = genAI.getGenerativeModel({ model: modelo });
+    const model = genAI.getGenerativeModel({
+      model: modelo,
+      generationConfig: { maxOutputTokens: 8000, temperature: 0.3 }
+    });
     const result = await model.generateContent(prompt);
     const response = await result.response;
-    return { text: response.text().trim(), modelName: modelo };
+    const text = response.text().trim();
+    if (!text || text.length < 50) throw new Error('Resposta inválida ou vazia.');
+    return { text, modelName: modelo };
   }, prompt);
 
   const laudoTexto = res?.text || '';

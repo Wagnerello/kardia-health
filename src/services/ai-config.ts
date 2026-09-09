@@ -34,7 +34,7 @@ async function enviarRequisicaoGroq(prompt: string, modelo: string, apiKey: stri
       model: modelo,
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
-      max_tokens: 1000
+      max_tokens: 4000
     })
   });
 
