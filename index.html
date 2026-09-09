@@ -1270,35 +1270,34 @@
 
           <div class="profile-header">
             <div class="profile-avatar-big" id="profile-avatar-big">?</div>
-            <div class="profile-name" id="profile-name">Carregando...</div>
-            <div class="profile-info" id="profile-info">Sem informações</div>
+            <div class="profile-header-details">
+              <div class="profile-name" id="profile-name">Carregando...</div>
+              <div class="profile-info" id="profile-info">Sem informações</div>
+            </div>
           </div>
 
-          <div class="dashboard-tab-switcher">
-            <button id="tab-btn-perfil-dados" class="dashboard-tab active" onclick="mostrarAbaPerfil('dados')">Dados
-              Pessoais</button>
-            <button id="tab-btn-perfil-historico" class="dashboard-tab"
-              onclick="mostrarAbaPerfil('historico')">Histórico Clínico</button>
-            <button id="tab-btn-perfil-medicacoes" class="dashboard-tab"
-              onclick="mostrarAbaPerfil('medicacoes')">Medicações</button>
+          <div class="dashboard-tab-switcher" role="tablist" aria-label="Abas de configuração do perfil">
+            <button id="tab-btn-perfil-dados" role="tab" aria-selected="true" aria-controls="tab-perfil-dados" tabindex="0" class="dashboard-tab active" onclick="mostrarAbaPerfil('dados')">Dados Pessoais</button>
+            <button id="tab-btn-perfil-historico" role="tab" aria-selected="false" aria-controls="tab-perfil-historico" tabindex="-1" class="dashboard-tab" onclick="mostrarAbaPerfil('historico')">Histórico Clínico</button>
+            <button id="tab-btn-perfil-medicacoes" role="tab" aria-selected="false" aria-controls="tab-perfil-medicacoes" tabindex="-1" class="dashboard-tab" onclick="mostrarAbaPerfil('medicacoes')">Medicações</button>
           </div>
 
           <div id="perfil-content">
             <form id="form-perfil">
               <!-- Section: Dados Pessoais -->
-              <div id="tab-perfil-dados" style="display:block;">
+              <div id="tab-perfil-dados" style="display:block;" role="tabpanel" aria-labelledby="tab-btn-perfil-dados">
                 <div class="dashboard-card" style="margin-bottom: 24px;">
                   <h3 style="margin: 0 0 16px; display: flex; align-items: center; gap: 8px; color: var(--text)">
                     👤 Dados Pessoais
                   </h3>
 
                   <div class="form-group">
-                    <label class="form-label">Nome</label>
+                    <label class="form-label" for="p-nome">Nome</label>
                     <input type="text" class="form-input" id="p-nome" required />
                   </div>
                   <div class="form-row">
                     <div class="form-group">
-                      <label class="form-label">Sexo</label>
+                      <label class="form-label" for="p-sexo">Sexo</label>
                       <select class="form-select" id="p-sexo" required>
                         <option value="masculino">Masculino</option>
                         <option value="feminino">Feminino</option>
@@ -1306,17 +1305,17 @@
                       </select>
                     </div>
                     <div class="form-group">
-                      <label class="form-label">Data de Nascimento</label>
+                      <label class="form-label" for="p-nascimento">Data de Nascimento</label>
                       <input type="date" class="form-input" id="p-nascimento" required />
                     </div>
                   </div>
                   <div class="form-row">
                     <div class="form-group">
-                      <label class="form-label">Peso (kg)</label>
+                      <label class="form-label" for="p-peso">Peso (kg)</label>
                       <input type="number" step="0.1" class="form-input" id="p-peso" min="20" max="300" required />
                     </div>
                     <div class="form-group">
-                      <label class="form-label">Altura (cm)</label>
+                      <label class="form-label" for="p-altura">Altura (cm)</label>
                       <input type="number" class="form-input" id="p-altura" min="50" max="250" />
                     </div>
                   </div>
@@ -1324,7 +1323,7 @@
               </div>
 
               <!-- Section: Histórico Clínico -->
-              <div id="tab-perfil-historico" style="display:none;">
+              <div id="tab-perfil-historico" style="display:none;" role="tabpanel" aria-labelledby="tab-btn-perfil-historico" aria-hidden="true">
                 <div class="dashboard-card" style="margin-bottom: 24px;">
                   <h3 style="margin: 0 0 16px; display: flex; align-items: center; gap: 8px; color: var(--text)">
                     📋 Histórico Clínico
@@ -1360,7 +1359,7 @@
               <button type="submit" class="btn btn-primary" id="btn-salvar-perfil"
                 style="display:flex;align-items:center;justify-content:center;gap:8px; width: 100%; margin-bottom: 24px; padding: 12px; font-weight: 600;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
                   <polyline points="17 21 17 13 7 13 7 21" />
                   <polyline points="7 3 7 8 15 8" />
@@ -1369,17 +1368,24 @@
             </form>
 
             <!-- Section: Medicações -->
-            <div id="tab-perfil-medicacoes" style="display:none;">
+            <div id="tab-perfil-medicacoes" style="display:none;" role="tabpanel" aria-labelledby="tab-btn-perfil-medicacoes" aria-hidden="true">
               <div class="dashboard-card" style="margin-bottom: 24px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
-                  <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; color: var(--text)">
-                    💊 Medicações e Suplementos
+                <div class="medications-header">
+                  <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/>
+                      <path d="m8.5 8.5 7 7"/>
+                    </svg>
+                    Medicações e Suplementos
                   </h3>
-                  <button class="btn btn-primary btn-small" onclick="abrirModalMedicacao()">+ Add</button>
+                  <button class="btn btn-primary btn-small" onclick="abrirModalMedicacao()" aria-label="Adicionar nova medicação">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <span>Nova Medicação</span>
+                  </button>
                 </div>
-                <div id="medications-list" style="display:flex; flex-direction:column; gap:8px;">
-                  <p style="color:var(--text-muted); font-size:14px; text-align:center;">Carregando...</p>
-                </div>
+                <ul id="medications-list" class="medication-list" role="list">
+                  <li style="color:var(--text-muted); font-size:14px; text-align:center; padding:16px 0; list-style:none;">Carregando...</li>
+                </ul>
               </div>
             </div>
           </div>
@@ -1972,11 +1978,16 @@
   </div>
 
   <!-- MODAL MEDICAÇÕES -->
-  <div id="modal-medicacao" class="modal-overlay hidden">
+  <div id="modal-medicacao" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-medicacao-title">
     <div class="modal">
       <div class="modal-header">
         <span id="modal-medicacao-title" class="modal-title">Nova Medicação</span>
-        <button class="modal-close" aria-label="Fechar" onclick="fecharModalMedicacao()">✕</button>
+        <button class="modal-close" aria-label="Fechar janela" onclick="fecharModalMedicacao()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
       </div>
       <form id="form-medicacao" style="margin-top:16px">
         <div class="form-group">

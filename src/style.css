@@ -9,6 +9,7 @@
   --bg-card: #ffffff;
   --bg-card2: #f1f5f9;
   --bg-input: #f8fafc;
+  --surface: #ffffff;
   --border: #e2e8f0;
   --text: #0f172a;
   --text-muted: #475569;
@@ -36,12 +37,13 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Respeito a preferência de movimento reduzido */
+/* Respeito a preferência de movimento reduzido seguro */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
-    animation-duration: 0.01ms !important;
+    animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -615,10 +617,14 @@ p { font-size: 0.95rem; line-height: 1.5; }
   border-radius: 12px; border: none; cursor: pointer;
   font-size: 15px; font-weight: 600; font-family: inherit;
   transition: var(--transition); text-decoration: none;
+  box-sizing: border-box;
 }
 .btn-primary {
   background: var(--primary);
-  color: white; width: 100%;
+  color: white;
+}
+button[type="submit"].btn-primary, .btn-block {
+  width: 100%;
 }
 .btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow); background: var(--primary-dark); }
 .btn-primary:active { transform: translateY(0); }
@@ -646,10 +652,12 @@ p { font-size: 0.95rem; line-height: 1.5; }
 .btn-danger { background: var(--danger); color: white; }
 .btn-success { background: var(--success); color: white; }
 .btn-small {
-  padding: 6px 12px;
+  padding: 8px 14px;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
+  width: auto !important;
+  min-height: 38px;
 }
 
 /* === GOOGLE SIGN IN === */
@@ -981,20 +989,232 @@ p { font-size: 0.95rem; line-height: 1.5; }
 
 /* === PERFIL === */
 .profile-header {
-  background: var(--primary-dark);
-  color: white;
-  border-radius: 20px; padding: 32px; text-align: center; margin-bottom: 20px;
-  box-shadow: var(--shadow);
+  background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+.profile-header::after {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
 }
 .profile-avatar-big {
-  width: 80px; height: 80px; border-radius: 50%;
-  background: var(--primary-light);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 32px; font-weight: 800; margin: 0 auto 16px;
-  border: 3px solid rgba(255,255,255,0.2);
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 800;
+  margin: 0;
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-.profile-name { font-size: 22px; font-weight: 700; }
-.profile-info { font-size: 14px; color: rgba(255, 255, 255, 0.8); margin-top: 4px; }
+.profile-header-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  flex: 1;
+}
+.profile-name {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+.profile-info {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.profile-badge-pill {
+  background: rgba(255, 255, 255, 0.18);
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+@media (max-width: 640px) {
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 16px;
+    gap: 14px;
+  }
+  .profile-header-details {
+    text-align: center;
+    align-items: center;
+  }
+  .profile-info {
+    justify-content: center;
+  }
+}
+
+/* === MEDICAÇÕES E SUPLEMENTOS === */
+.medications-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+.medications-header h3 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+}
+.medication-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.medication-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+.medication-item:hover {
+  border-color: rgba(29, 78, 216, 0.3);
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+.medication-item-concluido {
+  opacity: 0.7;
+  background: var(--bg-card2);
+}
+.medication-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+.medication-title {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.medication-dosage-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+  background: rgba(29, 78, 216, 0.08);
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(29, 78, 216, 0.15);
+}
+.medication-details {
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.medication-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.medication-badge-info {
+  background: rgba(29, 78, 216, 0.1);
+  color: var(--primary);
+  border: 1px solid rgba(29, 78, 216, 0.2);
+}
+.medication-badge-success {
+  background: rgba(5, 150, 105, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(5, 150, 105, 0.2);
+}
+.medication-badge-muted {
+  background: var(--bg-card2);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+.medication-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.medication-action-btn {
+  min-width: 44px;
+  min-height: 44px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.medication-action-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.medication-action-btn-edit {
+  color: var(--primary);
+}
+.medication-action-btn-edit:hover {
+  background: rgba(29, 78, 216, 0.08);
+  border-color: var(--primary);
+}
+.medication-action-btn-delete {
+  color: var(--danger);
+}
+.medication-action-btn-delete:hover {
+  background: rgba(220, 38, 38, 0.08);
+  border-color: var(--danger);
+}
 
 /* === TELA DE PERFIL INICIAL (ONBOARDING) === */
 #onboarding-screen {

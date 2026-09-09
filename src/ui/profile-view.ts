@@ -53,8 +53,16 @@ function atualizarCabecalho(p: UserProfile): void {
   const profInfo = document.getElementById('profile-info');
   if (profInfo) {
     const idadeStr = calcularTextoIdade(p.nascimento, p.idade);
-    const altStr = p.altura ? ` · ${p.altura} cm` : '';
-    profInfo.textContent = `${idadeStr} · ${p.peso || 0} kg${altStr} · ${p.sexo || ''}`;
+    const pesoStr = p.peso ? `${p.peso} kg` : '';
+    const altStr = p.altura ? `${p.altura} cm` : '';
+    const sexoStr = p.sexo ? (p.sexo.charAt(0).toUpperCase() + p.sexo.slice(1)) : '';
+
+    const badges = [idadeStr, pesoStr, altStr, sexoStr].filter(Boolean);
+    if (badges.length > 0) {
+      profInfo.innerHTML = badges.map(b => `<span class="profile-badge-pill">${b}</span>`).join('');
+    } else {
+      profInfo.textContent = 'Sem informações complementares';
+    }
   }
 }
 

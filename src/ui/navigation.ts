@@ -71,10 +71,18 @@ export function mostrarAbaPerfil(aba: string): void {
   const abasDisponiveis = ['dados', 'historico', 'medicacoes'];
   
   abasDisponiveis.forEach(a => {
+    const isAtiva = a === aba;
     const tabEl = document.getElementById(`tab-perfil-${a}`);
-    if (tabEl) tabEl.style.display = a === aba ? 'block' : 'none';
+    if (tabEl) {
+      tabEl.style.display = isAtiva ? 'block' : 'none';
+      tabEl.setAttribute('aria-hidden', isAtiva ? 'false' : 'true');
+    }
     const btn = document.getElementById(`tab-btn-perfil-${a}`);
-    if (btn) btn.classList.toggle('active', a === aba);
+    if (btn) {
+      btn.classList.toggle('active', isAtiva);
+      btn.setAttribute('aria-selected', isAtiva ? 'true' : 'false');
+      btn.setAttribute('tabindex', isAtiva ? '0' : '-1');
+    }
   });
 
   const btnSalvar = document.getElementById('btn-salvar-perfil');
