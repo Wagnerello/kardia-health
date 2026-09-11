@@ -14,6 +14,13 @@ Todas as alterações técnicas relevantes deste projeto são documentadas aqui 
 - [ui/ux] Redesign completo do cabeçalho de Filtros do Histórico: componentes separados em um card com `flex-direction: column` para melhor respiração visual, espaçamento de touch targets e correção de padding inferior do layout
 - [quality] 31/31 testes unitários passando
 
+## [2.2.0] - 2026-09-09
+- [feat] implementar hardening de firestore, telemetria de erros e meta tags seo (commit: 5e1839d) — Refs: auto
+- [test] Implementa matriz canônica completa com 28 testes (Happy Paths, Sad Paths, Sanitização XSS e Edge Cases) — Refs: arquitetura.md §4.4
+- [security] Hardening de headers HTTP (HSTS/CSP) e proteção serverless com Cloud Functions — Refs: 007-audit
+- [feat] Instalação da esteira de qualidade, governança SDD, Vitest e hooks Husky — Refs: arquitetura.md §11
+- [docs] Adiciona especificações completas do sistema (SDD) na pasta docs e atualiza README — Refs: docs/01..13
+
 ## [2.1.1] - 2026-09-09
 - [ui/ux] Correções completas da auditoria técnica Impeccable no módulo de Perfil e Medicações: contenção de largura do botão `+ Nova Medicação` (eliminando o esticamento indevido de `.btn-primary` em cabeçalhos flexbox)
 - [ui/ux] Redesign ergonômico do cabeçalho de perfil (`.profile-header`) com layout compacto, avatar com glassmorphism e badges pill (Idade, Peso, Altura, Sexo)
