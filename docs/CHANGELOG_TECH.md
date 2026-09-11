@@ -3,6 +3,7 @@
 Todas as alterações técnicas relevantes deste projeto são documentadas aqui no momento em que ocorrem, de forma granular por commit, independente de cortes de release.
 
 ## [Unreleased]
+- [feat] correção da regressão no botão novo registro e suporte a inserção de dados retroativos (commit: c9ac8fb) — Refs: auto
 
 ## [2.3.1] - 2026-09-11
 - [fix] Resolução da regressão no botão "Novo Registro" impedindo abertura de modais
