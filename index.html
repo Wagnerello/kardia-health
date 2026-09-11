@@ -2314,6 +2314,10 @@
       </div>
       <div style="padding: 16px 0;">
         <div class="form-group">
+          <label class="form-label">Data do Consumo</label>
+          <input type="date" class="form-input" id="water-modal-date" required />
+        </div>
+        <div class="form-group">
           <label class="form-label">Quantidade (ml)</label>
           <input type="number" class="form-input" id="water-modal-input" placeholder="Ex: 250" required />
         </div>
@@ -2348,15 +2352,17 @@
         </div>
         <div class="form-group">
           <label class="form-label">Momento da Medição</label>
-          <select class="form-select" id="g-momento" required>
-            <option value="jejum">Em Jejum (mínimo 8h)</option>
-            <option value="pos_prandial">Pós-Prandial (2h após refeição)</option>
-            <option value="antes_dormir">Antes de Dormir</option>
-            <option value="aleatorio">Aleatório / Outro</option>
+          <select class="form-select" id="g-contexto">
+            <option value="jejum">Em Jejum</option>
+            <option value="pre_prandial">Antes da Refeição (Pré-prandial)</option>
+            <option value="pos_prandial">Após Refeição (Pós-prandial, 2h)</option>
+            <option value="ao_deitar">Ao Deitar</option>
+            <option value="madrugada">Madrugada</option>
+            <option value="casual">Casual / Outro</option>
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Data e Hora da Medição</label>
+          <label class="form-label">Data e Hora</label>
           <input type="datetime-local" class="form-input" id="g-datetime" required />
         </div>
         <p id="g-form-error" class="form-error hidden" style="margin-bottom:12px"></p>
@@ -2383,6 +2389,10 @@
         <button class="modal-close" onclick="fecharModalPeso()">✕</button>
       </div>
       <div style="padding: 16px 0;">
+        <div class="form-group">
+          <label class="form-label">Data e Hora da Pesagem</label>
+          <input type="datetime-local" class="form-input" id="peso-modal-datetime" required />
+        </div>
         <div class="form-group">
           <label class="form-label">Novo Peso (kg)</label>
           <input type="number" step="0.1" class="form-input" id="peso-modal-input" placeholder="Ex: 78.5" min="20"

@@ -2,6 +2,17 @@
 
 Todas as novidades e melhorias para os usuários da plataforma KardIA.
 
+## [2.3.1] - 2026-09-11
+### Correções e Registros Retroativos
+- **Novo Registro**: Corrigido o problema que impedia o funcionamento do botão "Novo Registro", restaurando o acesso para adicionar dados.
+- **Registros de Dias Anteriores**: Agora é possível registrar consumo de água e peso retroativamente (dias anteriores).
+- **Estabilidade e Qualidade**: Adicionada uma nova suíte de testes rigorosa para garantir que os botões do sistema não parem de funcionar em atualizações futuras.
+
+## [2.3.0] - 2026-09-09
+### Redesign de Navegação e Melhorias de Experiência
+- **Barra Lateral Otimizada**: O botão "+ Novo Registro" foi movido para o topo para facilitar o acesso rápido e evitar cliques acidentais em "Sair".
+- **Abas do Painel Interativas**: Novo design de abas no painel (Hidratação, IMC, etc) que se expandem com animação suave ao serem selecionadas.
+
 ## [2.1.1] - 2026-09-09
 ### Acessibilidade, Ergonomia e Refinamento de Medicações
 - **Design do Perfil Aprimorado**: Cabeçalho moderno em formato compacto com identificação de idade, peso, altura e gênero em formato de pílulas.

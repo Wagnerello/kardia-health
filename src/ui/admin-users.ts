@@ -247,6 +247,11 @@ export function fecharModalAdminUserDetail(): void {
   if (modal) modal.classList.add('hidden');
 }
 
+export function fecharGerenciarUsuarioAdmin(): void {
+  const modal = document.getElementById('modal-gerenciar-usuario');
+  if (modal) modal.classList.add('hidden');
+}
+
 // Vinculação global
 window.renderizarCardsUsuariosAdmin = renderizarCardsUsuariosAdmin;
 window.renderizarTabelaUsuariosAdmin = renderizarTabelaUsuariosAdmin;
@@ -257,3 +262,5 @@ window.alterarRoleUsuarioAdmin = alterarRoleUsuarioAdmin;
 window.excluirUsuarioAdmin = excluirUsuarioAdmin;
 window.abrirDetalhesUsuarioAdmin = abrirDetalhesUsuarioAdmin;
 window.fecharModalAdminUserDetail = fecharModalAdminUserDetail;
+window.fecharGerenciarUsuarioAdmin = fecharGerenciarUsuarioAdmin;
+

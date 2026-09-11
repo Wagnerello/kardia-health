@@ -4,6 +4,13 @@ Todas as alterações técnicas relevantes deste projeto são documentadas aqui 
 
 ## [Unreleased]
 
+## [2.3.1] - 2026-09-11
+- [fix] Resolução da regressão no botão "Novo Registro" impedindo abertura de modais
+- [feat] Suporte a registros retroativos de Água e Peso com novos seletores de data/hora
+- [test] Inclusão de 78 testes de contrato de interface para blindagem anti-regressão de eventos onclick
+- [chore] Sincronização do package-lock.json e correção da esteira CI em ambientes ESM
+- [chore] resolve merge conflicts in changelog and version (commit: 16e1fdd) — Refs: auto
+
 ## [2.3.0] - 2026-09-09
 - [ui/ux] Refatoração da sidebar desktop: botão primário `+ Novo Registro` movido para o topo (padrão SaaS — Lei de Fitts), eliminando risco de missclick com o botão `Sair`
 - [ui/ux] Seção `Conta` (Meu Perfil + Sair) ancorada no rodapé da sidebar com divisor visual elegante e isolamento seguro

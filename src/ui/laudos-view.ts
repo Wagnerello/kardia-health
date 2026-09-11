@@ -331,6 +331,19 @@ export const gerarLaudoTelaIntegrado = async (): Promise<void> => {
   }
 };
 
+export const copiarLaudo = (): void => {
+  const content = document.getElementById('laudo-resultado-content');
+  if (content && content.innerText.trim()) {
+    navigator.clipboard.writeText(content.innerText).then(() => {
+      mostrarToast('Laudo copiado para a área de transferência!', 'success');
+    }).catch(() => {
+      mostrarToast('Erro ao copiar laudo.', 'error');
+    });
+  }
+};
+
 window.carregarLaudos = carregarLaudos;
 window.toggleLaudosMesGroup = toggleLaudosMesGroup;
 window.gerarLaudoTela = gerarLaudoTelaIntegrado;
+window.copiarLaudo = copiarLaudo;
+
