@@ -17,6 +17,7 @@ import {
   gerarFeedbackIA,
   buscarAfericoes,
 } from '../services/afericoes';
+import { buscarAguaDoDia, salvarAguaDoDia } from '../services/agua';
 import { carregarDashboard } from './dashboard-view';
 
 export const abrirModalAfericao = (): void => {
@@ -273,9 +274,136 @@ export const inicializarEventosModais = (): void => {
       fecharModalAfericao();
     }
   });
+
+  document.getElementById('modal-escolha-registro')?.addEventListener('click', (e) => {
+    if (e.target === document.getElementById('modal-escolha-registro')) {
+      fecharModalEscolhaRegistro();
+    }
+  });
+
+  document.getElementById('modal-agua')?.addEventListener('click', (e) => {
+    if (e.target === document.getElementById('modal-agua')) {
+      fecharModalAgua();
+    }
+  });
+
+  document.getElementById('modal-glicemia')?.addEventListener('click', (e) => {
+    if (e.target === document.getElementById('modal-glicemia')) {
+      if (window.fecharModalGlicemia) window.fecharModalGlicemia();
+    }
+  });
+};
+
+export const abrirModalEscolhaRegistro = (): void => {
+  if (state.userProfile?.role === 'ADMIN') {
+    mostrarToast('Administradores não registram aferições.', 'error');
+    return;
+  }
+  if (state.userProfile?.status === 'Inativo') {
+    mostrarToast('Sua conta está desativada.', 'error');
+    return;
+  }
+  document.getElementById('modal-escolha-registro')?.classList.remove('hidden');
+};
+
+export const fecharModalEscolhaRegistro = (): void => {
+  document.getElementById('modal-escolha-registro')?.classList.add('hidden');
+};
+
+export const abrirPressaoDeEscolha = (): void => {
+  fecharModalEscolhaRegistro();
+  abrirModalAfericao();
+};
+
+export const abrirGlicemiaDeEscolha = (): void => {
+  fecharModalEscolhaRegistro();
+  if (window.abrirModalGlicemia) {
+    window.abrirModalGlicemia();
+  }
+};
+
+export const abrirAguaDeEscolha = (): void => {
+  fecharModalEscolhaRegistro();
+  abrirModalAgua();
+};
+
+export const abrirModalAgua = (): void => {
+  if (state.userProfile?.status === 'Inativo') {
+    mostrarToast('Sua conta está desativada.', 'error');
+    return;
+  }
+  const modal = document.getElementById('modal-agua');
+  if (modal) {
+    modal.classList.remove('hidden');
+    const dtInput = document.getElementById('water-modal-date') as HTMLInputElement;
+    if (dtInput) {
+      const d = new Date();
+      const hojeStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      dtInput.value = hojeStr;
+    }
+  }
+};
+
+export const fecharModalAgua = (): void => {
+  document.getElementById('modal-agua')?.classList.add('hidden');
+};
+
+export const adicionarAguaModalPersonalizada = async (): Promise<void> => {
+  const inputEl = document.getElementById('water-modal-input') as HTMLInputElement;
+  const dtInput = document.getElementById('water-modal-date') as HTMLInputElement;
+  if (!inputEl) return;
+  const amt = inputEl.value;
+  if (amt && !isNaN(Number(amt))) {
+    const val = Number(amt);
+    if (val > 0) {
+      const d = new Date();
+      const hojeStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const dataStr = dtInput?.value || hojeStr;
+
+      if (dataStr === hojeStr) {
+        if (window.adicionarAgua) {
+          await window.adicionarAgua(val);
+        }
+      } else {
+        if (!state.currentUser) return;
+        try {
+          const existente = await buscarAguaDoDia(state.currentUser.uid, dataStr);
+          const total = (existente?.amount_ml || 0) + val;
+          await salvarAguaDoDia(state.currentUser.uid, dataStr, total, state.metaAgua);
+          mostrarToast(`Registrado ${val}ml de água para ${dataStr.split('-').reverse().join('/')}!`, 'success');
+          if (window.carregarHistoricoAgua) await window.carregarHistoricoAgua();
+        } catch (err) {
+          logger.error(err);
+          mostrarToast('Erro ao salvar registro de água retroativo.', 'error');
+        }
+      }
+      inputEl.value = '';
+      fecharModalAgua();
+    }
+  }
+};
+
+export const abrirModalSobre = (): void => {
+  document.getElementById('modal-sobre')?.classList.remove('hidden');
+};
+
+export const fecharModalSobre = (): void => {
+  document.getElementById('modal-sobre')?.classList.add('hidden');
 };
 
 window.abrirModalAfericao = abrirModalAfericao;
 window.fecharModalAfericao = fecharModalAfericao;
 window.pularOCR = pularOCR;
 window.salvarAfericaoModal = salvarAfericaoModal;
+window.abrirModalEscolhaRegistro = abrirModalEscolhaRegistro;
+window.fecharModalEscolhaRegistro = fecharModalEscolhaRegistro;
+window.abrirPressaoDeEscolha = abrirPressaoDeEscolha;
+window.abrirGlicemiaDeEscolha = abrirGlicemiaDeEscolha;
+window.abrirAguaDeEscolha = abrirAguaDeEscolha;
+window.abrirModalAgua = abrirModalAgua;
+window.fecharModalAgua = fecharModalAgua;
+window.adicionarAguaModalPersonalizada = adicionarAguaModalPersonalizada;
+window.abrirModalSobre = abrirModalSobre;
+window.fecharModalSobre = fecharModalSobre;
+
+

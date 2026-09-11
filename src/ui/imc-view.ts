@@ -129,10 +129,18 @@ export async function registrarPesoRapido() {
     return;
   }
 
+  const dtInput = document.getElementById('peso-modal-datetime') as HTMLInputElement;
+  const dataRegistro = dtInput?.value ? new Date(dtInput.value) : new Date();
+
   try {
-    await salvarHistoricoPeso(state.currentUser.uid, pesoVal);
-    state.userProfile.peso = pesoVal;
-    await salvarPerfilUsuario(state.currentUser.uid, { peso: pesoVal });
+    await salvarHistoricoPeso(state.currentUser.uid, pesoVal, dataRegistro);
+    
+    // Atualiza peso atual no perfil apenas se for a pesagem mais recente ou do dia
+    const hoje = new Date();
+    if (dataRegistro.toDateString() === hoje.toDateString() || dataRegistro >= hoje) {
+      state.userProfile.peso = pesoVal;
+      await salvarPerfilUsuario(state.currentUser.uid, { peso: pesoVal });
+    }
     
     if (input) input.value = '';
     fecharModalPeso();
@@ -140,6 +148,7 @@ export async function registrarPesoRapido() {
     
     carregarImcPage();
     if (window.carregarPerfil) window.carregarPerfil();
+    if (window.carregarHistorico) window.carregarHistorico();
   } catch (err) {
     logger.error(err);
     mostrarToast('Erro ao salvar registro de peso.', 'error');
@@ -149,7 +158,15 @@ export async function registrarPesoRapido() {
 export function abrirPesoDeEscolha() {
   if (window.fecharModalEscolhaRegistro) window.fecharModalEscolhaRegistro();
   const m = document.getElementById('modal-peso');
-  if (m) m.classList.remove('hidden');
+  if (m) {
+    m.classList.remove('hidden');
+    const dtInput = document.getElementById('peso-modal-datetime') as HTMLInputElement;
+    if (dtInput) {
+      const now = new Date();
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+      dtInput.value = now.toISOString().slice(0, 16);
+    }
+  }
 }
 
 export function fecharModalPeso() {
@@ -233,5 +250,6 @@ window.carregarImcPage = carregarImcPage;
 window.salvarAlturaLegada = salvarAlturaLegada;
 window.registrarPesoRapido = registrarPesoRapido;
 window.abrirPesoDeEscolha = abrirPesoDeEscolha;
+window.abrirModalPeso = abrirPesoDeEscolha;
 window.fecharModalPeso = fecharModalPeso;
 window.excluirRegistroPeso = excluirRegistroPeso;

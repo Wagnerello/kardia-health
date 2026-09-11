@@ -45,6 +45,11 @@ declare global {
     abrirPressaoDeEscolha: () => void;
     abrirGlicemiaDeEscolha: () => void;
     abrirPesoDeEscolha: () => void;
+    abrirAguaDeEscolha: () => void;
+    abrirModalSobre: () => void;
+    fecharModalSobre: () => void;
+    copiarLaudo: () => void;
+    fecharGerenciarUsuarioAdmin: () => void;
     abrirModalConfirmacao: (titulo: string, msg: string, onConfirm: () => void, opts?: ModalConfirmacaoOpts) => void;
     fecharModalConfirmacao: () => void;
     executarConfirmacaoModal: () => void;
